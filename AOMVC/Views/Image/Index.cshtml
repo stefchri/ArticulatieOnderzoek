@@ -1,0 +1,37 @@
+﻿@model ICollection<LibAOModels.Image>
+@section Styles{
+    @Styles.Render("~/Content/themes/lightness")
+}
+
+@{
+    ViewBag.Title = "Afbeeldingen";
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort?"": ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
+}
+
+<h1>Afbeeldingen</h1>
+<hr />
+<ul class="unstyled clearfix" id="images">
+@foreach (var image in Model)
+{
+    string imageurl = path + image.Url;
+    <li class="image-block">
+        <img src="@imageurl" alt="@image.Name" class="img-polaroid"/>
+        <div class="image-overlay">
+            <h3 class="name">@image.Name</h3>
+            <p>(@image.Phonetic)</p>
+            <div class="buttongroup-edit">
+                <button class="btn btn-mini" title="Aanpassen" onclick="window.location='@Url.Action("Edit",new {id = image.ID})'"><i class="icon-edit"></i></button>
+                <button class="btn btn-danger btn-mini delete" title="Verwijderen" data-id="@image.ID"><i class="icon-remove-circle"></i></button>
+            </div>
+        </div>
+    </li>
+}
+</ul>
+<hr />
+<div class="actionlink">
+    <button class="btn" onclick="window.location='@Url.Action("Upload", "Image")'" title="Afbeeldingen toevoegen">Afbeeldingen toevoegen</button>
+</div>
+@section Scripts{
+   @Scripts.Render("~/bundles/jqueryui")
+   @Scripts.Render("~/bundles/images")
+}

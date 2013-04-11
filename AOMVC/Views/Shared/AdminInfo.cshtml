@@ -1,0 +1,38 @@
+﻿@{
+    var drop = Convert.ToInt32(ViewBag.toAnalyse);
+    string badge = "";
+    if (drop>=10)
+    {
+        badge = "badge-important";
+    }
+    else if (drop>=5)
+    {
+       badge = "badge-warning"; 
+    }
+    else
+    {
+        badge = "badge-success";
+    }
+}
+@{
+    var drop2 = Convert.ToInt32(ViewBag.toFinish);
+    string badge2 = "";
+    if (drop2 >= 10)
+    {
+        badge2 = "badge-important";
+    }
+    else if (drop2 >= 5)
+    {
+        badge2 = "badge-warning";
+    }
+    else
+    {
+        badge2 = "badge-success";
+    }
+}
+<ul class="unstyled sidebar-actions">
+    <li><span class="badge @badge">@ViewBag.toAnalyse</span><a href="@Url.Action("ToAnalyse", "Test")">analyseren</a></li>
+
+    <li><span class="badge @badge2">@ViewBag.toFinish</span><a href="@Url.Action("ToFinish", "Test")">afmaken</a></li>
+</ul>
+

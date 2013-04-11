@@ -1,0 +1,12 @@
+﻿@model ICollection<LibAOModels.Routine>
+@{
+    ViewBag.Title = "Routines";
+}
+
+<h2>Routines</h2>
+<ul class="unstyled">
+    @foreach (var r in Model)
+    {
+        <li onclick="@Url.Action("Detail", new { id = r.ID })">@r.Name</li>
+    }
+</ul>

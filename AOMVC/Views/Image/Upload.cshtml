@@ -1,0 +1,25 @@
+﻿@section Styles {
+    @Styles.Render("~/Content/phonetic/css")
+}
+
+@{
+    ViewBag.Title = "Afbeeldingen Toevoegen";
+}
+
+<h1>Afbeeldingen toevoegen</h1>
+<section id="upload-section">
+    <p class='error'></p>
+    <input type="file" accept="image/*" name="file" multiple="multiple" id="upload"/>
+    <a class="btn" href="#" id="uploadClone" title="Kies afbeeldingen"><i class="icon-picture"></i>Kies afbeeldingen</a>
+    <ul id="upload-render" class="unstyled">
+    </ul>
+    <input type="button" id="upload-send" value="Opslagen" class="btn"/>
+</section>
+<hr />
+<div class="actionlink">
+    <button class="btn" onclick="window.location='@Url.Action("Index", "Image")'" title="Terug naar lijst">Terug naar lijst</button>
+</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/upload")
+    @Scripts.Render("~/bundles/phonetic")
+}

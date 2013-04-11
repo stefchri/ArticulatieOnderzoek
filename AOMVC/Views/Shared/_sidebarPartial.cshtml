@@ -1,0 +1,34 @@
+﻿<div class="span3 fullheight sidebar">
+    <h2>ArticulatieOnderzoek</h2>
+    <hr />
+    <ul class="unstyled sidebar-actions main-actions">
+        <li><a href="@Url.Action("Index", "Home")"><i class="icon-home"></i>home</a></li>
+        <li><a href="@Url.Action("Index", "Child")"><i class="icon-user"></i>kinderen</a></li>
+        <li><a href="@Url.Action("Index", "Test")"><i class="icon-tasks"></i>testen</a></li>
+    </ul>
+    <hr />
+
+    <h3><i class="icon-bullhorn"></i>notificaties</h3>
+
+    @Html.Action("AdminInfo", "Account")
+
+    <hr />
+
+    <h3><i class="icon-user"></i>@User.Identity.Name</h3>
+
+    <ul class="unstyled sidebar-actions">
+        <li><a href="@Url.Action("Create", "Test")"><i class="icon-tasks"></i>test</a></li>
+        <li><a href="@Url.Action("Appointment", "Contact")"><i class="icon-calendar"></i>afspraak</a></li>
+        <li><a href="@Url.Action("Register", "Child")"><i class="icon-user"></i>kind</a></li>
+        <li><a href="@Url.Action("Register", "Account")"><i class="icon-user"></i>logopedist</a></li>
+    </ul> 
+    
+    <hr />
+
+    <ul class="unstyled sidebar-actions bottom-actions inline">
+        <li><a href="@Url.Action("Index", "Help")"><i class="icon-info-sign"></i>help</a></li>
+        <li><a href="@Url.Action("Index", "Contact")"><i class="icon-comment"></i>contact</a></li>
+        <li><a href="@Url.Action("LogOff", "Account")"><i class="icon-off"></i>afmelden</a></li>
+    </ul>   
+    <a href="http://www.sig-net.be/" class="logo" title="sig werkgroep"><img src="~/Content/Images/logo.png" alt="Sig onderzoeksgroep logo" /></a>
+ </div>

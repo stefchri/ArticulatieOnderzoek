@@ -1,0 +1,57 @@
+﻿@model AOMVC.Models.ChildAppointmentModel
+
+@{
+    ViewBag.Title = "Afspraak";
+}
+
+<h2>Afspraak</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+   
+        
+        <div class="editor-label">
+            kind
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("children")
+        </div>
+    
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Time)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Time)
+            @Html.ValidationMessageFor(model => model.Time)
+        </div>
+    
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Date)
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Message)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Message)
+            @Html.ValidationMessageFor(model => model.Message)
+        </div>
+
+        <p>
+            <input type="submit" class="btn" value="Maak afspraak" />
+        </p>
+}
+<div>
+    @Html.ActionLink("Terug naar lijst van kinderen", "Index", "Child")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

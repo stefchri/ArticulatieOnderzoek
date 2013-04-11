@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+<h1>Stel een vraag</h1>
+@using (Html.BeginForm("Contact", "Contact", FormMethod.Post, new { @class = "form-horizontal span6"}))
+{ 
+    @Html.AntiForgeryToken()
+    @Html.Label("question", "vraag")
+    @Html.TextArea("question")
+           
+    <input type="submit" class="btn" value="Verzenden" />
+    @Html.ValidationSummary(true, "Email verzenden is niet gelukt, verbeter de fouten en probeer nog eens.")
+}

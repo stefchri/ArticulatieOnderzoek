@@ -1,0 +1,102 @@
+﻿@model ICollection<LibAOModels.Image>
+@{
+    ViewBag.Title = "Routine Maken";
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
+    
+}
+<style>
+    .gallery-img {
+        float: left;
+        width: 120px;
+        height: 120px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .gallery-img img {
+        width:100px;
+        height: 100px;
+        display:block;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+</style>
+<h1>Routine maken</h1>
+
+
+<section id="name-step" class="">
+    <h2>Stap 1: Naam en gegevens invullen</h2>
+    <p>Naam: </p>
+    <input type="text" id="routine-name" />
+    <hr class="clear"/>
+    <div class="actionlink">
+        <button title="Volgende stap(2)" onclick="next(1)" class="btn right">Volgende stap</button>
+    </div>
+</section>
+<section id="image-step" class="">
+    <h2>Stap 2: Afbeeldingen selecteren</h2>
+    <section class="gallery">
+        <ul class="unstyled">
+            @foreach (LibAOModels.Image img in Model)
+            {
+                string url = path + img.Url;
+                <li class="gallery-img"><img src="@url" alt="@img.Name" /></li>
+            }
+        </ul>
+    </section>
+    <hr class="clear"/>
+    <div class="actionlink">
+        <button title="Volgende stap(2)" onclick="next(2)" class="btn right">Volgende stap</button>
+    </div>
+</section>
+<section id="sorting-step">
+    <h2>Stap 3: Gekozen afbeeldingen sorteren</h2>
+    <section class="gallery">
+        <ul class="unstyled sortable">
+            
+        </ul>
+    </section>
+    <hr class="clear"/>
+    <div class="actionlink">
+        <button title="Volgende stap(2)" onclick="next(2)" class="btn right">Volgende stap</button>
+    </div>
+</section>
+<div class="actionlink left">
+    <button title="Terug naar de lijst" onclick="window.location='@Url.Action("Index")'" class="btn left">Terug naar de lijst</button>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script>
+        $(".gallery-img").click(function (e) {
+            if($(e.currentTarget).hasClass("selected"))
+            {
+                $(e.currentTarget).css({"background":"none"});
+                $(e.currentTarget).removeClass("selected");
+            }
+            else {
+                $(e.currentTarget).css({"background-color":"#9E9E9E"});
+                $(e.currentTarget).addClass("selected");
+            }
+        });
+        function next(id) {
+            switch (id) {
+                case 1: $("#name-step").hide();
+                    $("#image-step").show();
+                    break;
+                case 2: $("#image-step").hide();
+                    $("#sorting-step").show();
+                    var outp = "";
+                    $("#image-step .selected").each(function (k, v) {
+                        outp += '<li class="gallery-img"><img src="' + $(v).find('img').first().attr('src') + '" alt="' + $(v).find('img').first().attr('alt') + '" /></li>';
+                    });
+                    $(".sortable").html(outp);
+                    $(".sortable").sortable();
+                    $(".sortable").disableSelection();
+                    break;
+            }
+        }
+    </script>
+}
+

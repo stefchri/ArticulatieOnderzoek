@@ -1,0 +1,84 @@
+﻿@model LibAOModels.Image
+@section Styles{
+    @Styles.Render("~/Content/phonetic/css")
+}
+
+@{
+    ViewBag.Title = "Afbeelding aanpassen";
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString());
+    string imgPath = path + "/images/" + Model.Url;
+    string soundPath = path + "/sound/" + Model.SoundUrl; 
+    byte[] byt = System.Text.Encoding.UTF8.GetBytes(Model.ID.ToString());
+    string id = Convert.ToBase64String(byt);
+                
+}
+
+<h1>@Model.Name aanpassen</h1>
+<hr />
+<figure class="background clearfix span5"><img src="@imgPath" class="img-polaroid" /></figure>
+<section class="edit-form form-horizontal span6 clearfix" data-id="@id">
+
+    <div class="control-group">
+        @Html.LabelFor(a => a.Name, new { @class = "control-label"})
+        <div class="controls">
+            @Html.TextBoxFor(a => a.Name, new {@class="img-name", @placeholder="Naam"})
+        </div>
+        @Html.ValidationMessageFor(a => a.Name)
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(a => a.Phonetic, new { @class = "control-label"})
+        <div class="controls">
+            @Html.TextBoxFor(a => a.Phonetic, new {@class="phonetic", @placeholder="Fonetisch"})
+        </div>
+        @Html.ValidationMessageFor(a => a.Phonetic)
+    </div>
+
+    <div class="control-group">
+    @Html.LabelFor(a => a.Sentence, new { @class = "control-label"})
+        <div class="controls">
+            @Html.TextBoxFor(a => a.Sentence, new {@class="sentence", @placeholder="Aanvulzin"})
+        </div>
+        @Html.ValidationMessageFor(a => a.Sentence)
+    </div>
+        
+
+    @*<input type="text" class="img-name" name="naam" placeholder="Naam" value="@Model.Name" />
+    <input type="text" placeholder="Fonetisch" class="phonetic" name="phonetic" />
+    <input type="text" placeholder="Aanvulzin" name="sentence" class="sentence"/>*@
+    
+    <div class="control-group">
+        <div class="controls audioInput">
+        @Html.TextBoxFor(i => i.SoundUrl, new {@type="file", @class="audio", @accept="audio/*"})
+        
+        @*<input type="file" accept="audio/*" name="audio" class="audio"/>*@
+        <a class="btn audioClone" href="#" title="Verander geluidsfragment" onclick="$('#SoundUrl').click();">
+            <i class="icon-music"></i>Verander geluidsfragment
+        </a>
+            <div class="audioTag">
+                <div class="progress nodisplay"></div>
+                <audio preload="auto" controls="controls">
+                    <source type="audio/wav" src="@soundPath"/>
+                    Your browser does not support the audio tag.
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <input type="submit" class="btn" title="Opslagen" value="Opslagen" id="edit-image-submit"/>
+        </div>
+    </div>
+</section>
+
+<hr class="clear" />
+<div class="actionlink">
+    <button class="btn" title="Terug naar lijst" onclick="window.location='@Url.Action("Index")'">Terug naar de lijst</button>
+</div>
+
+
+@section Scripts{
+    @Scripts.Render("~/bundles/phonetic")
+    @Scripts.Render("~/bundles/editImage")
+}

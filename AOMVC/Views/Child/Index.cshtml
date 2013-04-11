@@ -1,0 +1,37 @@
+﻿@model IEnumerable<LibAOModels.User>
+
+@{
+    ViewBag.Title = "Kinderen";
+}
+<div class="clearfix">
+    <h1 class="left clearfix">Kinderen 
+        @if (HttpContext.Current.Request.Path.Split('/')[HttpContext.Current.Request.Path.Split('/').Count()-1] == "Search")
+        {
+            <span class="query">@HttpContext.Current.Request.Params[0]</span>
+        }
+    </h1>
+    <form class="form-search clearfix" method="get" action="/Child/Search">
+        <div class="input-append">
+            <input type="text" class="input-medium" name="query">
+            <span class="add-on"><i class="icon-search"></i></span>
+        </div>
+        <button type="submit" class="btn">Zoeken</button>
+        @if (HttpContext.Current.Request.Path.Split('/')[HttpContext.Current.Request.Path.Split('/').Count()-1] == "Search")
+        {
+            <button type="button" class="btn" title="Reset filter" onclick="window.location='@Url.Action("Index")'">Reset filter</button>
+        }
+    </form>
+</div>
+<hr />
+
+
+<ul class="unstyled clearfix">
+    @foreach (var item in Model) {
+        <li class="user" title="@item.Firstname @item.Surname details" onclick="window.location=' @Url.Action("Detail", new { id = item.ID }) '">@Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Surname)</li>
+    }
+</ul>
+<hr />
+<div class="actionlink">
+    <button title="Registreer kind" class="btn" onclick="window.location='@Url.Action("Register")'">Registreer een nieuw kind</button>
+</div>
+
