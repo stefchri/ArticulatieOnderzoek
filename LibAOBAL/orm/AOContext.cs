@@ -12,6 +12,7 @@ namespace LibAOBAL.orm
         public IDbSet<ErrorCategory> ErrorCategories { get; set; }
         public IDbSet<Image> Images { get; set; }
         public IDbSet<Routine> Routines { get; set; }
+        public IDbSet<RoutineImage> RoutineImages { get; set; }
         public IDbSet<Test> Tests { get; set; }
         public IDbSet<User> Users { get; set; }
         
@@ -163,6 +164,10 @@ namespace LibAOBAL.orm
                .Property(c => c.Modifieddate)
                .HasColumnName("image_modifieddate")
                .IsOptional();
+            modelBuilder.Entity<Image>()
+                .HasMany(a => a.Routines)
+                .WithRequired(ri => ri.Image)
+                .HasForeignKey(ri => ri.ImageId);
             modelBuilder.Entity<Image>().ToTable("images");
 
             //ROUTINES
@@ -198,14 +203,17 @@ namespace LibAOBAL.orm
                 .HasForeignKey(s => s.AdminID).WillCascadeOnDelete(false);
             modelBuilder.Entity<Routine>()
                 .HasMany(a => a.ImagesInRoutine)
-                .WithMany(c => c.Routines)
-                .Map(m =>
-                {
-                    m.MapLeftKey("routine_id");
-                    m.MapRightKey("image_id");
-                    m.ToTable("routines_has_images");
-                });
+                .WithRequired(ri => ri.Routine)
+                .HasForeignKey(ri => ri.RoutineId);
             modelBuilder.Entity<Routine>().ToTable("routines");
+
+            //RoutineImages
+            modelBuilder.Entity<RoutineImage>().HasKey(ri => new { ri.RoutineId, ri.ImageId });
+            modelBuilder.Entity<RoutineImage>()
+                .Property(ri => ri.ImageOrder)
+                .HasColumnName("image_order")
+                .IsRequired();
+            modelBuilder.Entity<RoutineImage>().ToTable("routines_has_images");
 
             //TESTS
             modelBuilder.Entity<Test>().HasKey(d => d.ID);

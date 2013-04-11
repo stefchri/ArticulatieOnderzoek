@@ -302,7 +302,7 @@ var _error = false;
 
             xhr.addEventListener("load", function (evt) {
                 //set attributes for data-id and source
-                e.target.setAttribute('data-id', evt.target.responseText);
+                e.target.setAttribute('data-id', evt.target.responseText.split(",")[0]);
                 var audios = '<audio controls="controls" preload="preload">'
                             +'<source src="' + _rootSound + evt.target.responseText.split(",")[0] + '" type="audio/wav">'
                             +'Your browser does not support the audio tag.'

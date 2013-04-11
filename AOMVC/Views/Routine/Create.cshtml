@@ -21,13 +21,12 @@
         margin-top: 10px;
     }
 </style>
-<h1>Routine maken</h1>
-
+<h1>Nieuwe module maken</h1>
+<hr />
 
 <section id="name-step" class="">
-    <h2>Stap 1: Naam en gegevens invullen</h2>
-    <p>Naam: </p>
-    <input type="text" id="routine-name" />
+    <h2>Stap 1: Naam invullen</h2>
+    <input type="text" id="routine-name" name="naam" placeholder="Naam van module"/>
     <hr class="clear"/>
     <div class="actionlink">
         <button title="Volgende stap(2)" onclick="next(1)" class="btn right">Volgende stap</button>
@@ -46,7 +45,8 @@
     </section>
     <hr class="clear"/>
     <div class="actionlink">
-        <button title="Volgende stap(2)" onclick="next(2)" class="btn right">Volgende stap</button>
+        <button title="Volgende stap(3)" onclick="next(2)" class="btn right">Volgende stap</button>
+        <button title="Vorige stap(1)" onclick="prev(1)" class="btn right">Vorige stap</button>
     </div>
 </section>
 <section id="sorting-step">
@@ -58,7 +58,8 @@
     </section>
     <hr class="clear"/>
     <div class="actionlink">
-        <button title="Volgende stap(2)" onclick="next(2)" class="btn right">Volgende stap</button>
+        <button title="Module afmaken" onclick="finish()" class="btn right">Maak</button>
+        <button title="Vorige stap(2)" onclick="prev(2)" class="btn right">Vorige stap</button>
     </div>
 </section>
 <div class="actionlink left">
@@ -67,8 +68,13 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryui")
+    
+    
 
     <script>
+        $("#routine-name").focus(function (e) {
+            $(e.target).attr("style", "");
+        });
         $(".gallery-img").click(function (e) {
             if($(e.currentTarget).hasClass("selected"))
             {
@@ -82,8 +88,15 @@
         });
         function next(id) {
             switch (id) {
-                case 1: $("#name-step").hide();
-                    $("#image-step").show();
+                case 1:
+                    if ($("#routine-name").val() == "") {
+                        console.log("empty");
+                        $("#routine-name").css({ "background": "#D36A6A", "color": "white" });
+                    } else {
+                        $("#name-step").hide();
+                        $("#image-step").show();
+                    }
+                    
                     break;
                 case 2: $("#image-step").hide();
                     $("#sorting-step").show();
@@ -96,6 +109,20 @@
                     $(".sortable").disableSelection();
                     break;
             }
+        }
+        function prev(id) {
+            switch (id) {
+                case 1: $("#image-step").hide();
+                    $("#name-step").show();
+                    break;
+                case 2: 
+                    $("#sorting-step").hide();
+                    $("#image-step").show();
+                    break;
+            }
+        }
+        function finish() {
+            console.log("send to server");
         }
     </script>
 }

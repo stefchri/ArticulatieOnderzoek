@@ -26,7 +26,7 @@ namespace LibAOModels
         public DateTime Createddate { get; set; }
         public DateTime Modifieddate { get; set; }
 
-        public virtual ICollection<Routine> Routines { get; set; }
+        public virtual ICollection<RoutineImage> Routines { get; set; }
         public virtual Admin AdminCreated { get; set; }
     }
 }

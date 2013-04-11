@@ -1,12 +1,17 @@
 ﻿@model ICollection<LibAOModels.Routine>
 @{
-    ViewBag.Title = "Routines";
+    ViewBag.Title = "Modules";
 }
 
-<h2>Routines</h2>
+<h1>Modules</h1>
+<hr />
 <ul class="unstyled">
     @foreach (var r in Model)
     {
-        <li onclick="@Url.Action("Detail", new { id = r.ID })">@r.Name</li>
+        <li onclick="window.location='@Url.Action("Detail", new { id = r.ID })'">@r.Name</li>
     }
 </ul>
+<div class="actionlink">
+    <button class="btn" title="Nieuwe module maken" onclick="window.location='@Url.Action("Create")'">Nieuwe module maken</button>
+    <button class="btn" title="Afbeeldingen beheren" onclick="window.location='@Url.Action("Index", "Image")'">Afbeeldingen</button>
+</div>

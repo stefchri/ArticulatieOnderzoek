@@ -15,13 +15,13 @@ namespace LibAOModels
         //public string Url { get; set; }
         [Required]
         public DateTime Createddate { get; set; }
-        public DateTime Modifieddate { get; set; }
-        public DateTime Deleteddate { get; set; }
+        public Nullable<DateTime> Modifieddate { get; set; }
+        public Nullable<DateTime> Deleteddate { get; set; }
         [Required]
         public Int32 AdminID { get; set; }
 
         public virtual Admin AdminCreated { get; set; }
         public virtual ICollection<Test> TestsUsingRoutine { get; set; }
-        public virtual ICollection<Image> ImagesInRoutine { get; set; }
+        public virtual ICollection<RoutineImage> ImagesInRoutine { get; set; }
     }
 }
