@@ -1,14 +1,31 @@
 ﻿@model ICollection<LibAOModels.Routine>
 @{
     ViewBag.Title = "Modules";
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
 }
 
 <h1>Modules</h1>
 <hr />
-<ul class="unstyled">
+<ul class="unstyled clearfix">
     @foreach (var r in Model)
     {
-        <li onclick="window.location='@Url.Action("Detail", new { id = r.ID })'">@r.Name</li>
+        <li onclick="window.location='@Url.Action("Edit", new { id = r.ID })'" class="clearfix routine">
+            <span class="name">@r.Name</span>
+            <ul class="unstyled images gallery">
+                @{var images = r.ImagesInRoutine.OrderBy(ir => ir.ImageOrder).Take(10).ToList(); }
+                @foreach (var img in images)
+	            {
+                    var url = path + img.Image.Url;
+		            <li class="gallery-img"><img src="@url" title="@img.Image.Name" /></li>
+	            }
+                @if (images.Count == 10)
+                {
+                    <li class="gallery-img dots">...</li>
+                }
+                
+            </ul>
+        </li>
+        
     }
 </ul>
 <div class="actionlink">

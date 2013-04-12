@@ -17,6 +17,7 @@ namespace LibAOBAL.orm
         private GenericRepository<ErrorCategory> _errorCategoryRepository;
         private GenericRepository<Image> _imageRepository;
         private GenericRepository<Routine> _routineRepository;
+        private GenericRepository<RoutineImage> _routineImageRepository;
         private GenericRepository<Test> _testRepository;
         private GenericRepository<User> _userRepository;
 
@@ -82,6 +83,19 @@ namespace LibAOBAL.orm
                     this._routineRepository = new GenericRepository<Routine>(context);
                 }
                 return _routineRepository;
+            }
+        }
+
+        public GenericRepository<RoutineImage> RoutineImageRepository
+        {
+            get
+            {
+
+                if (this._routineImageRepository == null)
+                {
+                    this._routineImageRepository = new GenericRepository<RoutineImage>(context);
+                }
+                return _routineImageRepository;
             }
         }
 

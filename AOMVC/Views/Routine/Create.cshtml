@@ -1,26 +1,10 @@
 ﻿@model ICollection<LibAOModels.Image>
 @{
-    ViewBag.Title = "Routine Maken";
+    ViewBag.Title = "Module Maken";
     string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
     
 }
-<style>
-    .gallery-img {
-        float: left;
-        width: 120px;
-        height: 120px;
-        margin-right: 20px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-    }
-    .gallery-img img {
-        width:100px;
-        height: 100px;
-        display:block;
-        margin-left: 10px;
-        margin-top: 10px;
-    }
-</style>
+
 <h1>Nieuwe module maken</h1>
 <hr />
 
@@ -39,7 +23,7 @@
             @foreach (LibAOModels.Image img in Model)
             {
                 string url = path + img.Url;
-                <li class="gallery-img"><img src="@url" alt="@img.Name" /></li>
+                <li class="gallery-img" data-id="@img.ID"><img src="@url" alt="@img.Name" /></li>
             }
         </ul>
     </section>
@@ -68,62 +52,6 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryui")
-    
-    
-
-    <script>
-        $("#routine-name").focus(function (e) {
-            $(e.target).attr("style", "");
-        });
-        $(".gallery-img").click(function (e) {
-            if($(e.currentTarget).hasClass("selected"))
-            {
-                $(e.currentTarget).css({"background":"none"});
-                $(e.currentTarget).removeClass("selected");
-            }
-            else {
-                $(e.currentTarget).css({"background-color":"#9E9E9E"});
-                $(e.currentTarget).addClass("selected");
-            }
-        });
-        function next(id) {
-            switch (id) {
-                case 1:
-                    if ($("#routine-name").val() == "") {
-                        console.log("empty");
-                        $("#routine-name").css({ "background": "#D36A6A", "color": "white" });
-                    } else {
-                        $("#name-step").hide();
-                        $("#image-step").show();
-                    }
-                    
-                    break;
-                case 2: $("#image-step").hide();
-                    $("#sorting-step").show();
-                    var outp = "";
-                    $("#image-step .selected").each(function (k, v) {
-                        outp += '<li class="gallery-img"><img src="' + $(v).find('img').first().attr('src') + '" alt="' + $(v).find('img').first().attr('alt') + '" /></li>';
-                    });
-                    $(".sortable").html(outp);
-                    $(".sortable").sortable();
-                    $(".sortable").disableSelection();
-                    break;
-            }
-        }
-        function prev(id) {
-            switch (id) {
-                case 1: $("#image-step").hide();
-                    $("#name-step").show();
-                    break;
-                case 2: 
-                    $("#sorting-step").hide();
-                    $("#image-step").show();
-                    break;
-            }
-        }
-        function finish() {
-            console.log("send to server");
-        }
-    </script>
+    @Scripts.Render("~/bundles/createRoutine")
 }
 

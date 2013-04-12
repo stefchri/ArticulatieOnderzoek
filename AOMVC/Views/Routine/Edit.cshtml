@@ -1,0 +1,117 @@
+﻿@section Styles{
+    @Styles.Render("~/Content/themes/lightness")
+}
+
+@model LibAOModels.Routine
+
+@{
+    ViewBag.Title = "Module " + Model.Name;
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
+}
+
+<h1>@Html.DisplayFor(m => m.Name) module aanpassen</h1>
+<hr />
+<section class="form-horizontal routine-edit" data-id="@Model.ID">
+    <div class="control-group">
+        <label class="control-label pad" for="Name">Naam</label>
+        @Html.TextBoxFor(model => model.Name, new {@placeholder="Naam"})
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="">Aangemaakt</label>
+        <span>@Html.DisplayFor(model => model.Createddate, "ShortDateTime")</span>
+    </div>
+    @if (!Model.Modifieddate.Equals(DateTime.MinValue) && !Model.Modifieddate.Equals(DBNull.Value) && !Model.Modifieddate.Equals(null))
+    {
+        <div class="control-group">
+            <label class="control-label" for="">Laatst aangepast</label>
+            <span>@Html.DisplayFor(model => model.Modifieddate)</span>
+        </div>
+    }
+    
+
+    <div class="control-group">
+        <label class="control-label" for="">Logopedist</label>
+        <span>@Html.DisplayFor(model => model.AdminCreated.Firstname) @Html.DisplayFor(model => model.AdminCreated.Surname)</span>
+    </div>
+    <div class="routine clear">
+        <ul class="gallery unstyled clearfix sortable">
+            @{var ordered = Model.ImagesInRoutine.OrderBy(im => im.ImageOrder);}
+            @foreach (var img in ordered)
+            {
+                var url = path + img.Image.Url;
+                <li class="gallery-img clearfix clickable" data-id="@img.ImageId">
+                    <img src="@url" title="@img.Image.Name" />
+                </li>
+            }
+        </ul>
+    </div>
+</section>
+<hr />
+<div class="actionlink">
+    <button title="Aanpassen" onclick="edit()" class="btn">Aanpassen</button>
+    <button title="Terug naar lijst" onclick="window.location='@Url.Action("Index")'" class="btn">Terug naar lijst</button>
+</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryui")
+<script>
+
+    var _routineEdit = "http://" + window.location.host.toString() + "/Routine/Edit/";
+    var _error = false;
+
+    window.onload = function(e) {
+        $(".sortable").sortable();
+        $(".sortable").disableSelection();
+        $("#Name").focus(function (e) {
+            $(e.target).attr("style", "");
+            _error = false;
+        });
+    };
+
+    function edit() {
+        var name = $("#Name").val();
+        var imgs = [];
+        var id = $(".routine-edit").data('id');
+        $(".gallery .gallery-img").each(function (i, v) {
+            imgs.push($(v).data('id').toString());
+        });
+
+        if (name == null || name == "" || name == undefined ) {
+            $("#Name").css({ "background": "#D36A6A", "color": "white" });
+            _error = true;
+            var htmlstring = '<div class="alert alert-error fade in">'
+                                    + '<button type="button" class="close" data-dismiss="alert">×</button>'
+                                    + '<span class="alert-text">Het veld naam mag niet leeg zijn.</span>'
+                                + '</div>';
+            $("body").prepend(htmlstring);
+            $('.alert').alert();
+            setTimeout(function () {
+                $(".alert").alert('close');
+            }, 3000);
+        }
+
+        if (!_error) {
+            var formData = new FormData();
+            formData.append("name", name);
+            formData.append("imgs", imgs);
+            formData.append("id", id);
+            var xhr = new XMLHttpRequest();
+
+            xhr.addEventListener("load", function (evt) {
+                if (evt.target.responseText == "200") {
+                    window.location = "http://" + window.location.host.toString() + "/Routine/?message=routineedit";
+                };
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error attempting to upload the file.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The upload has been canceled by the user or the browser dropped the connection.");
+            }, false);
+            xhr.open("POST", _routineEdit);
+            xhr.send(formData);
+        }
+        
+    };
+</script>
+}

@@ -54,6 +54,9 @@ h3 {
 .nodisplay {
     display: none;
 }
+.clickable {
+    cursor: pointer;
+}
 .login {
     margin: 150px auto 0;
     width: 246px;
@@ -168,6 +171,9 @@ h3 {
     border-radius: 5px;
     border-top: 1px solid #FFF;
     height: 1px;
+}
+.content hr:first-of-type {
+    margin-top: 0;
 }
 .info {
     padding: 20px 0px 20px;
@@ -390,6 +396,70 @@ figure.background img{
 #image-step, #sorting-step {
     display: none;
 }
+.gallery-img {
+    float: left;
+    width: 120px;
+    height: 120px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.gallery-img img {
+    width: 100px;
+    height: 100px;
+    display:block;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+/* Routines */
+.routine {
+    cursor: pointer;
+    background: rgba(0,0,0,0.1);
+    padding: 10px;
+    margin-bottom: 1px;
+    border-radius:3px;
+}
+.routine span {
+    font-size: 21px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.routine .dots {
+    font-size:30px;
+    line-height: 30px;
+}
+.routine .gallery-img {
+    border-radius: 5px 5px 5px 5px;
+    float: left;
+    height: 40px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 40px;
+}
+.routine .gallery-img img {
+    display: block;
+    height: 40px;
+    margin-left: 0;
+    margin-top: 0;
+    width: 40px;
+}
+
+/* Routine Edit */
+.routine-edit .control-label {
+    font-size: 16px;
+    text-align:left;
+}
+.routine-edit span {
+    font-size: 16px;
+}
+.routine-edit .control-label:not(.pad) {
+    padding-top: 0;
+}
+.routine-edit .gallery {
+    margin: 0;
+    padding-top: 10px;
+}
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {

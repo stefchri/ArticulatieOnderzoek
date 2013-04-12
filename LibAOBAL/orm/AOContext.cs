@@ -213,6 +213,22 @@ namespace LibAOBAL.orm
                 .Property(ri => ri.ImageOrder)
                 .HasColumnName("image_order")
                 .IsRequired();
+            modelBuilder.Entity<RoutineImage>()
+                .Property(c => c.RoutineId)
+                .HasColumnName("routine_id")
+                .IsRequired();
+            modelBuilder.Entity<RoutineImage>()
+                .HasRequired(c => c.Routine)
+                .WithMany(c => c.ImagesInRoutine)
+                .HasForeignKey(s => s.RoutineId);
+            modelBuilder.Entity<RoutineImage>()
+                .Property(c => c.ImageId)
+                .HasColumnName("image_id")
+                .IsRequired();
+            modelBuilder.Entity<RoutineImage>()
+                .HasRequired(c => c.Image)
+                .WithMany(c => c.Routines)
+                .HasForeignKey(s => s.ImageId);
             modelBuilder.Entity<RoutineImage>().ToTable("routines_has_images");
 
             //TESTS

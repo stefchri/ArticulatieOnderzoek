@@ -45,34 +45,96 @@ namespace AOMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string name)
+        public ActionResult Create(string name, string imgs)
         {
-            return View();
+            if (name != "" && imgs != "")
+            {
+                string[] im = imgs.Split(',');
+                List<int> images = new List<int>();
+                foreach (var i in im)
+                {
+                    images.Add(Convert.ToInt32(i));
+                }
+
+                Routine r = new Routine();
+                r.Name = name;
+                r.AdminID = MVCExtensions.getCurrentAdmin().ID;
+                r.Createddate = DateTime.UtcNow;
+                
+                
+                Adapter.RoutineRepository.Insert(r);
+                Adapter.Save();
+
+                var it = 1;
+                foreach (var img in images)
+	            {
+                    RoutineImage ri = new RoutineImage();
+                    ri.ImageId= img;
+                    ri.RoutineId = r.ID;
+                    ri.ImageOrder = it;
+                    Adapter.RoutineImageRepository.Insert(ri);
+                    Adapter.Save();
+                    r.ImagesInRoutine.Add(ri);
+                    it++;
+	            }
+                Adapter.Save();
+
+                return Content("200");
+            }
+            return Content("401");
         }
 
-        public ActionResult Detail(int id)
-        {
-            var detail = Adapter.RoutineRepository.GetByID(id);
-            return View(detail);
-        }
 
         public ActionResult Edit(int id)
         {
             var edit = Adapter.RoutineRepository.GetByID(id);
-            
-            //VIEW NOT IMPLEMENTED
-
             return View(edit);
         }
 
         [HttpPost]
-        public ActionResult Edit(Routine r)
+        public ActionResult Edit(string name, string imgs, string id)
         {
-            var original = Adapter.RoutineRepository.GetByID(r.ID);
-            
-            //TO IMPLEMENT
+            if (name != "" && imgs != "" && id != "")
+            {
+                string[] im = imgs.Split(',');
+                List<int> images = new List<int>();
+                foreach (var i in im)
+                {
+                    images.Add(Convert.ToInt32(i));
+                }
 
-            return View(r);
+                Routine r = Adapter.RoutineRepository.GetByID(Convert.ToInt32(id));
+                r.Name = name;
+                r.Modifieddate = DateTime.UtcNow;
+                Adapter.RoutineRepository.Update(r);
+                Adapter.Save();
+                List<RoutineImage> delete = r.ImagesInRoutine.ToList();
+
+                foreach (var rim in delete)
+                {
+                    Adapter.RoutineImageRepository.Delete(rim);
+                }
+
+
+                Adapter.Save();
+
+                var it = 1;
+                foreach (var img in images)
+                {
+                    RoutineImage ri = new RoutineImage();
+                    ri.ImageId = img;
+                    ri.RoutineId = r.ID;
+                    ri.ImageOrder = it;
+                    Adapter.RoutineImageRepository.Insert(ri);
+                    Adapter.Save();
+                    r.ImagesInRoutine.Add(ri);
+                    it++;
+                }
+                Adapter.Save();
+
+                return Content("200");
+            }
+            return Content("401");
         }
     }
 }
