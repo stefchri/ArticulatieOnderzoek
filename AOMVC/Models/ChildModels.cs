@@ -29,13 +29,12 @@ namespace AOMVC.Models
         [Required(ErrorMessage = "Geboortedatum verplicht in te vullen.")]
         [Display(Name = "geboortedatum")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString="0:dd/mm/yy")]
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Geslacht verplicht aan te duiden.")]
         [Display(Name = "geslacht")]
         public string Gender { get; set; }
-
     }
 
     public class ChildAppointmentModel

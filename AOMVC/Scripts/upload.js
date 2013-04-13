@@ -1,18 +1,4 @@
-﻿
-//**************************************************************************
-
-
-//  TODO:
-
-//      Validation for input fields before send to server
-/**********************************************************************
-                    CHECK FOR VISUALISATION AUDIO
-**********************************************************************/
-
-//**************************************************************************
-
-
-var pointer = 0;
+﻿var pointer = 0;
 var _uploadImagePath = window.location.toString();
 var _uploadSoundPath = "http://" + window.location.host.toString() + "/Image/UploadSound";
 var _root = "http://" + window.location.host.toString() + "/images/temp/";
