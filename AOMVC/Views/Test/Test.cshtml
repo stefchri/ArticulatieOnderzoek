@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+</head>
+<body>
+    <div>
+        @ViewBag.Child
+        @ViewBag.Routine
+    </div>
+    <script>
+        var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
+        var formData = new FormData();
+        formData.append("id", @ViewBag.Routine);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function (evt) {
+            console.log(evt.target.responseText);
+        }, false);
+        xhr.addEventListener("error", function (evt) {
+            console.log("There was an error attempting to upload the file.");
+        }, false);
+        xhr.addEventListener("abort", function (evt) {
+            console.log("The upload has been canceled by the user or the browser dropped the connection.");
+        }, false);
+        xhr.open("POST", _getImages);
+        xhr.send(formData);
+    </script>
+</body>
+</html>

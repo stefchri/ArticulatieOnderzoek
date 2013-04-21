@@ -301,6 +301,7 @@
     <Content Include="Views\Image\Edit.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ShortDateTime.cshtml" />
     <Content Include="Views\Test\Children.cshtml" />
+    <Content Include="Views\Test\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
