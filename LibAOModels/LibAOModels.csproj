@@ -33,6 +33,9 @@
     <Reference Include="DataAnnotationsExtensions">
       <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -45,9 +48,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.2.0.0\lib\NETFramework40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin.cs" />
+    <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="ErrorCategory.cs" />
     <Compile Include="Gender.cs" />

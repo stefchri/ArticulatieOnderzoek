@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
 using LibAOBAL.security;
 using System.Security.Principal;
@@ -13,6 +12,7 @@ using System.Threading;
 using System.Globalization;
 using LibAOBAL.orm;
 using System.Web.Script.Serialization;
+using System.Web.Optimization;
 
 
 namespace AOMVC

@@ -40,6 +40,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/alert")
+    <script>
+        $(".sidebar").css({"height":$(window).height()+'px'});
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

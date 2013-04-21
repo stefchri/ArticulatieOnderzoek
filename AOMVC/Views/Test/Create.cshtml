@@ -1,5 +1,64 @@
-﻿@{
+﻿@model ICollection<LibAOModels.Routine>
+@{
     ViewBag.Title = "Nieuwe test";
+    string path = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/images/";
 }
 
 <h1>Nieuwe test maken</h1>
+<hr />
+<h2>Selecteer een module om te testen</h2>
+<ul class="unstyled clearfix routines">
+    @foreach (var r in Model)
+    {
+        <li class="clearfix routine noselect" onclick="makeActive(this)" data-id="@r.ID">
+            <span class="name">@r.Name</span>
+            <ul class="unstyled images gallery">
+                @{var images = r.ImagesInRoutine.OrderBy(ir => ir.ImageOrder).Take(10).ToList(); }
+                @foreach (var img in images)
+	            {
+                    var url = path + img.Image.Url;
+		            <li class="gallery-img"><img src="@url" title="@img.Image.Name" /></li>
+	            }
+                @if (images.Count == 10)
+                {
+                    <li class="gallery-img dots">...</li>
+                }
+                
+            </ul>
+        </li>
+        
+    }
+</ul>
+<h2>Selecteer het kind om te testen</h2>
+@Html.Action("Children")
+
+<hr />
+<div class="actionlink">
+    <button class="btn" onclick="window.location='@Url.Action("Index")'" title="Terug naar lijst">Terug naar lijst</button>
+    <button class="btn" onclick="startTest()" title="Test starten">Start test</button>
+</div>
+
+@section Scripts{
+    <script>
+        $(".routines li").first().addClass("chosenRoutine");
+        function makeActive(e) {
+            $(".routines li").each(function (i, v) {
+                $(v).removeClass("chosenRoutine");
+            })
+            $(e).addClass("chosenRoutine");
+        }
+        $(".children li").first().addClass("selectedChild");
+        function makeChildActive(e) {
+            $(".children li").each(function (i, v) {
+                $(v).removeClass("selectedChild");
+            })
+            $(e).addClass("selectedChild");
+        }
+        function startTest() {
+            var rout = $(".routines").find(".chosenRoutine").first().data("id");
+            var child = $(".children").find(".selectedChild").first().data("id");
+            console.log("routine: " + rout);
+            console.log("Child: " + child);
+        }
+    </script>
+}

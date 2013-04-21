@@ -18,7 +18,7 @@
         <button type="submit" class="btn">Zoeken</button>
         @if (HttpContext.Current.Request.Path.Split('/')[HttpContext.Current.Request.Path.Split('/').Count()-1] == "Search")
         {
-            <button type="button" class="btn" title="Reset filter" onclick="window.location='@Url.Action("Index")'">Reset filter</button>
+            <button type="button" class="btn" title="Schakel filter uit" onclick="window.location='@Url.Action("Index")'">Schakel filter uit</button>
         }
     </form>
 </div>
@@ -27,7 +27,7 @@
 
 <ul class="unstyled clearfix">
     @foreach (var item in Model) {
-        <li class="user" title="@item.Firstname @item.Surname details" onclick="window.location=' @Url.Action("Detail", new { id = item.ID }) '">@Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Surname)</li>
+        <li class="childSelect noselect" title="@item.Firstname @item.Surname details" onclick="window.location=' @Url.Action("Detail", new { id = item.ID }) '"><i class="icon-user"></i>@Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Surname)</li>
     }
 </ul>
 <hr />

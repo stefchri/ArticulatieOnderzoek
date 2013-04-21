@@ -45,11 +45,11 @@ namespace AOMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string name, string imgs)
+        public ActionResult Create(string name, string imges)
         {
-            if (name != "" && imgs != "")
+            if (name != "" && imges != "")
             {
-                string[] im = imgs.Split(',');
+                string[] im = imges.Split(',');
                 List<int> images = new List<int>();
                 foreach (var i in im)
                 {

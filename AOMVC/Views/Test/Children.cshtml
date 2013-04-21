@@ -1,0 +1,9 @@
+﻿@model ICollection<LibAOModels.User>
+
+<ul class="unstyled clearfix children">
+    @foreach (var item in Model) {
+        <li class="childSelect noselect" title="@item.Firstname @item.Surname" data-id="@item.ID" onclick="makeChildActive(this)">
+            <i class="icon-user"></i>
+            @Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Surname)</li>
+    }
+</ul>

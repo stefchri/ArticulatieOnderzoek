@@ -461,6 +461,33 @@ figure.background img{
 }
 
 
+
+
+/* Create Test */
+.chosenRoutine {
+    background: rgba(0, 0, 0, 0.3);
+}
+.childSelect {
+    margin-bottom:10px;
+    font-size:15px;
+    cursor: pointer;
+    width: 160px;
+    float:left;
+    border-radius: 5px;
+    background: #e2e2e2;
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    border: 1px solid #e2e2e2;
+    border: 1px solid rgba(0,0,0,0.3);
+    margin-right: 10px;
+}
+.childSelect:hover {
+    border: 1px solid rgba(0,0,0,0.1);
+}
+.selectedChild {
+    background: rgba(0,0,0,0.3);
+}
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
 

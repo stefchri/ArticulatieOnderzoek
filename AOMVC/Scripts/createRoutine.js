@@ -64,7 +64,7 @@ function finish() {
 
     var formData = new FormData();
     formData.append("name", _name);
-    formData.append("imgs", imgs);
+    formData.append("imges", imgs);
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener("load", function (evt) {
