@@ -57,8 +57,6 @@
         function startTest() {
             var rout = $(".routines").find(".chosenRoutine").first().data("id");
             var child = $(".children").find(".selectedChild").first().data("id");
-            console.log("routine: " + rout);
-            console.log("Child: " + child);
             window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child;
         }
     </script>

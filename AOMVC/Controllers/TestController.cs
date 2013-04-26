@@ -70,10 +70,11 @@ namespace AOMVC.Controllers
             return PartialView(childr);
         }
 
+        
         public ActionResult GetRoutines(int id)
         {
             var rout = Adapter.RoutineImageRepository.Find(c => c.RoutineId.Equals(id),null).OrderBy(c => c.ImageOrder).ToList();
-
+            
             JArray ImageArray = new JArray(
                 rout.Select(p => new JObject{      
                     {"Name", p.Image.Name},
@@ -82,8 +83,10 @@ namespace AOMVC.Controllers
                     {"Order", p.ImageOrder},
                 })
             );
+            JObject jo = new JObject();
+            jo["Images"] = ImageArray;
 
-            return Content(ImageArray.ToString());
+            return Json(jo.ToString(Newtonsoft.Json.Formatting.None), JsonRequestBehavior.AllowGet);
         }
     }
 }

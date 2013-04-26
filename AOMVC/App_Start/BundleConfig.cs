@@ -45,6 +45,9 @@ namespace AOMVC
             bundles.Add(new ScriptBundle("~/bundles/createRoutine").Include(
                         "~/Scripts/createRoutine.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/test").Include(
+                        "~/Scripts/test.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/Site.css"));
 
