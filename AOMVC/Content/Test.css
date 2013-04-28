@@ -1,0 +1,103 @@
+﻿@font-face {
+    font-family: HelneueUltraLight;
+    src: url(fonts/HelveticaNeueLT.ttf);
+    font-weight:normal;
+}
+@font-face {
+    font-family: HelneueLight;
+    src: url(fonts/HelveticaNeueLTDikker.ttf);
+    font-weight:normal;
+}
+* {
+    margin: 0;
+} 
+body, html {
+    font-family: Helvetica, Arial, sans-serif;
+    height: 100%;
+    background: #000;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.75);
+    background-image: url('Images/bg_noise.png');
+    background-repeat: repeat;
+
+}
+h1, h2, h3 {
+    font-family: HelneueUltraLight, Arial, sans-serif;
+}
+.images {
+    display:block;
+    height: 100%;
+    width: 100%;
+    margin: 0 !important;
+}
+.images li {
+    display: none;
+    width: auto;
+    height: 100%;
+    text-align: center;
+}
+.images li img{
+    height: 95%;
+    text-align: center;
+    -webkit-box-shadow:  0px 0px 2px 2px rgba(0, 0, 0, 0.75);
+    box-shadow:  0px 0px 2px 2px rgba(0, 0, 0, 0.75);
+    margin-top: 1%;
+}
+.active {
+   display: block !important; 
+}
+footer {
+    display: block;;
+    position: absolute;
+    bottom: 0px;
+    height: 100px;
+    width: 100%;
+    background: #000;
+    background: rgb(0,0,0);
+    background: rgba(0,0,0,0.75);
+}
+footer .buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+footer .buttons li {
+    text-align: center;
+    width: 50px;
+    height: 50px;
+}
+footer .buttons li a{
+    display: block;
+    text-align: center;
+    width: 15px;
+    height: 22px;
+    border-radius: 1000px;
+    background: #EFEFEF;
+    background: rgba(250,250,250,1);
+    padding: 11px 15px;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+}
+footer .buttons li a:hover, footer .buttons li a:focus {
+    text-decoration: none;
+    border: none;
+}
+.sentence {
+    display: none;
+    position: absolute;
+    top: 30px;
+    width: 50%;
+    height: auto;
+    padding: 5px 10px;
+    margin-left: 25%;
+    font-size: 30px;
+    font-family: HelneueUltraLight, Helvetica, sans-serif;
+    color: #6A6A6A;
+    color: rgba(120,120,120, 0.9);
+    z-index: 2;
+    text-align: center;
+    border-radius: 5px;
+    background: #EEE;
+    background: rgb(230,230,230);
+    background: rgba(200,200,200,0.8);
+}

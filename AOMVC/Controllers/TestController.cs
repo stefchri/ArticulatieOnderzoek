@@ -86,7 +86,7 @@ namespace AOMVC.Controllers
             JObject jo = new JObject();
             jo["Images"] = ImageArray;
 
-            return Json(jo.ToString(Newtonsoft.Json.Formatting.None), JsonRequestBehavior.AllowGet);
+            return Json(jo.ToString(), JsonRequestBehavior.AllowGet);
         }
     }
 }

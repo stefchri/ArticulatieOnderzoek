@@ -1,4 +1,4 @@
-﻿using Microsoft.Web.Optimization;
+﻿//using Microsoft.Web.Optimization;
 using System.Web;
 using System.Web.Optimization;
 
@@ -46,7 +46,10 @@ namespace AOMVC
                         "~/Scripts/createRoutine.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/test").Include(
-                        "~/Scripts/test.js"));
+                        "~/Scripts/jRecorder.js",
+                        "~/Scripts/fullscreen.js",
+                        "~/Scripts/test.js"
+                        ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/Site.css"));
@@ -74,6 +77,15 @@ namespace AOMVC
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
                 "~/Content/bootstrap/css/bootstrap.css",
                 "~/Content/bootstrap/css/bootstrap-responsive.css"));
+
+
+            bundles.Add(new StyleBundle("~/Content/bootstrapnoresponsive").Include(
+                "~/Content/bootstrap/css/bootstrap.css"));
+
+            
+
+            bundles.Add(new StyleBundle("~/Content/Test").Include(
+                "~/Content/Test.css"));
         }
     }
 }
