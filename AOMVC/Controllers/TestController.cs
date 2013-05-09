@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using LibAOModels;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace AOMVC.Controllers
 {
@@ -56,11 +57,20 @@ namespace AOMVC.Controllers
         {
             return View();
         }
-        public ActionResult Test(int routine, int child)
+        public ActionResult Test(int routine, int child, string kind)
         {
             ViewBag.Child = child;
             ViewBag.Routine = routine;
+            Test test = new Test();
+            test.AdminID = MVCExtensions.getCurrentAdmin().ID;
+            test.Createddate = DateTime.UtcNow;
+            test.Kind = kind;
+            test.RoutineID = routine;
+            test.UserID = child;
 
+            Adapter.TestRepository.Insert(test);
+            Adapter.Save();
+            ViewBag.testid = test.ID;
             return View();
         }
 
@@ -87,6 +97,37 @@ namespace AOMVC.Controllers
             jo["Images"] = ImageArray;
 
             return Json(jo.ToString(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadSound(string test)
+        {
+            string[] request = test.Split('$');
+            int image = Convert.ToInt32(request[1]);
+
+            Test t = Adapter.TestRepository.GetByID(Convert.ToInt64(request[0]));
+            //CREATE DIRECTORIES
+            string dir = Server.MapPath("~/results/");
+            if (!System.IO.Directory.Exists(dir + t.ID.ToString()))
+            {
+                System.IO.Directory.CreateDirectory(dir + t.ID.ToString());
+            }
+
+            string path = dir + t.ID.ToString() + "/" + image.ToString();
+
+            using (FileStream output = System.IO.File.Create(path + ".wav"))
+            {
+                using (Stream input = Request.InputStream)
+                {
+                    byte[] buffer = new byte[input.Length];
+                    int bytesRead;
+                    while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        output.Write(buffer, 0, bytesRead);
+                    }
+                    output.Close();
+                }
+            }
+            return Content("Hello");
         }
     }
 }

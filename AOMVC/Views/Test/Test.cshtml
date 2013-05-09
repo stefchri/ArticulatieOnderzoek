@@ -16,9 +16,9 @@
     </ul>
     <footer>
         <ul class="unstyled inline buttons">
-            <li><a href="#"><i class="icon-resize-full"></i></a></li>
-            <li><a href="#">Z</a></li>
-            <li><a href="#"><i class="icon-resize-full"></i></a></li>
+            <li><a href="#" title="fullscreen"><i class="icon-fullscreen"></i></a></li>
+            <li><a href="#" title="aanvulzin">Z</a></li>
+            <li><a href="#" title="start opnemen"><i class="icon-play"></i></a></li>
             <li><a href="#"><i class="icon-resize-full"></i></a></li>
             <li><a href="#"><i class="icon-resize-full"></i></a></li>
             <li><a href="#"><i class="icon-resize-full"></i></a></li>
@@ -27,6 +27,7 @@
     <div id="record"></div>
     <script>
         var routineid = @ViewBag.Routine;
+        var _testid = @ViewBag.testid;
     </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

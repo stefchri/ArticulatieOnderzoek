@@ -313,6 +313,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\temp\" />
+    <Folder Include="results\" />
     <Folder Include="sound\temp\" />
     <Folder Include="sound\test\" />
     <Folder Include="Views\Error\" />

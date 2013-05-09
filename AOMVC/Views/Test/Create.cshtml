@@ -32,6 +32,11 @@
 <h2>Selecteer het kind om te testen</h2>
 @Html.Action("Children")
 
+<h2>Selecteer de testsoort</h2>
+<input type="radio" name="kind" value="normal" id="normal" checked="checked" class="inlinerbl" /><label for="normal" class="inlinelabel">Normaal</label><br />
+<input type="radio" name="kind" value="repeat" id="repeat" class="inlinerbl" /><label for="repeat" class="inlinelabel">Herhalen</label><br />
+<input type="radio" name="kind" value="sentence" id="sentence" class="inlinerbl" /><label for="sentence" class="inlinelabel">Aanvulzin</label><br />
+
 <hr />
 <div class="actionlink">
     <button class="btn" onclick="window.location='@Url.Action("Index")'" title="Terug naar lijst">Terug naar lijst</button>
@@ -57,7 +62,8 @@
         function startTest() {
             var rout = $(".routines").find(".chosenRoutine").first().data("id");
             var child = $(".children").find(".selectedChild").first().data("id");
-            window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child;
+            var kind = $('input[name=kind]:checked').val();
+            window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child +"&kind=" + kind;
         }
     </script>
 }

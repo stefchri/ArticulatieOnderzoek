@@ -487,6 +487,19 @@ figure.background img{
 .selectedChild {
     background: rgba(0,0,0,0.3);
 }
+.inlinelabel {
+    display: inline;
+    margin-left: 10px;
+    position: relative;
+    top: -6px;
+}
+.inlinerbl {
+    margin-bottom: 20px !important;
+    font-size: 16px;
+    padding-top: 5px;
+    margin-left: 25px !important;
+}
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {

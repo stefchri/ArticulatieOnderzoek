@@ -1,6 +1,7 @@
 ﻿var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
 var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
+var _swfPath = "http://" + window.location.host.toString() + "/Scripts/jRecorder.swf";
 var _timer;
 var _sentenceTimer;
 var _imgs;
@@ -23,6 +24,9 @@ var _audio;
             });
             $("footer li:nth-of-type(2)").mouseup(function (e) {
                 App.showSentence(false, e);
+            });
+            $("footer li:nth-of-type(3)").mouseup(function (e) {
+                App.handleBtnStartRec();
             });
             $("body").mousemove(function (e) {
                 App.toggleFooter();
@@ -103,6 +107,7 @@ var _audio;
             }
         },
         goTo: function (number) {
+            $.jRecorder.sendData();
             var l;
             if (0 <= number && number < _imgs.length) {
                 l = _imgs[number];
@@ -114,6 +119,7 @@ var _audio;
                 l = _imgs[0];
                 _active = 0;
             }
+            $("#record").remove();
             App.renderImage(l);
         },
         renderImage: function (image) {
@@ -124,18 +130,21 @@ var _audio;
             $(".images li:nth-of-type(" + image.Order + ")").addClass("active");
         },
         startRecording: function () {
+            
+        },
+        handleBtnStartRec: function () {
             var settings = {
                 'rec_width': '300',
                 'rec_height': '200',
-                'rec_top': '0px',
-                'rec_left': '0px',
+                'rec_top': '40%',
+                'rec_left': '40%',
                 'recorderlayout_id': 'flashrecarea',
                 'recorder_id': 'audiorecorder',
                 'recorder_name': 'audiorecorder',
                 'wmode': 'transparent',
                 'bgcolor': '#ff0000',
-                'swf_path': 'jRecorder.swf',
-                'host': 'acceptfile.php?filename=hello.wav',
+                'swf_path': _swfPath,
+                'host':  _soundUploadPath +'?test=' + _testid + '$' + (_active+1).toString() ,
                 'callback_started_recording': function () { },
                 'callback_finished_recording': function () { },
                 'callback_stopped_recording': function () { },
@@ -143,8 +152,9 @@ var _audio;
                 'callback_activityTime': function (time) { },
                 'callback_activityLevel': function (level) { }
             };
-
             $.jRecorder(settings, $("#record"));
+
+            $.jRecorder.record();
         }
     }
     App.init();
