@@ -206,9 +206,9 @@
 	}
 	
 	
-	$.jRecorder.callback_finished_sending = function(){
+	$.jRecorder.callback_finished_sending = function(name){
 		
-		jRecorderSettings['callback_finished_sending']();
+		jRecorderSettings['callback_finished_sending'](name);
 		
 	}
 	
@@ -227,6 +227,11 @@
 		
 	}
 	
+	$.jRecorder.callback_finished_params = function (params) {
+
+	    jRecorderSettings['callback_finished_params'](params);
+
+	}
 		
 					
 	

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using LibAOModels;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Text;
 
 namespace AOMVC.Controllers
 {
@@ -99,20 +100,19 @@ namespace AOMVC.Controllers
             return Json(jo.ToString(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UploadSound(string test)
+        public ActionResult UploadSound(string filename)
         {
-            string[] request = test.Split('$');
-            int image = Convert.ToInt32(request[1]);
-
-            Test t = Adapter.TestRepository.GetByID(Convert.ToInt64(request[0]));
+            Test t = Adapter.TestRepository.GetByID(Convert.ToInt64(filename));
             //CREATE DIRECTORIES
             string dir = Server.MapPath("~/results/");
             if (!System.IO.Directory.Exists(dir + t.ID.ToString()))
             {
                 System.IO.Directory.CreateDirectory(dir + t.ID.ToString());
             }
+            string i = new Random().Next(999).ToString();
+            string name = DateTime.UtcNow.Millisecond + i;
 
-            string path = dir + t.ID.ToString() + "/" + image.ToString();
+            string path = dir + t.ID.ToString() + "/" + name;
 
             using (FileStream output = System.IO.File.Create(path + ".wav"))
             {
@@ -127,7 +127,8 @@ namespace AOMVC.Controllers
                     output.Close();
                 }
             }
-            return Content("Hello");
+            
+            return Content(name);
         }
     }
 }

@@ -6,7 +6,7 @@ var _timer;
 var _sentenceTimer;
 var _imgs;
 var _active = 0;
-var _audio;
+var _audio = {};
 
 (function () {
     var App = {
@@ -107,20 +107,17 @@ var _audio;
             }
         },
         goTo: function (number) {
-            $.jRecorder.sendData();
+            
             var l;
             if (0 <= number && number < _imgs.length) {
                 l = _imgs[number];
                 _active = number;
-            } else if (number < 0) {
-                l = _imgs[_imgs.length - 1];
-                _active = _imgs.length - 1;
-            } else if (number >= _imgs.length) {
-                l = _imgs[0];
-                _active = 0;
-            }
-            $("#record").remove();
-            App.renderImage(l);
+                $.jRecorder.stop();
+                $.jRecorder.sendData();
+                App.HandleNextAudioCapture();
+                App.renderImage(l);
+            } 
+            
         },
         renderImage: function (image) {
             $(".sentence").html(image.Sentence);
@@ -130,9 +127,6 @@ var _audio;
             $(".images li:nth-of-type(" + image.Order + ")").addClass("active");
         },
         startRecording: function () {
-            
-        },
-        handleBtnStartRec: function () {
             var settings = {
                 'rec_width': '300',
                 'rec_height': '200',
@@ -144,17 +138,26 @@ var _audio;
                 'wmode': 'transparent',
                 'bgcolor': '#ff0000',
                 'swf_path': _swfPath,
-                'host':  _soundUploadPath +'?test=' + _testid + '$' + (_active+1).toString() ,
+                'host': _soundUploadPath + '?filename=' + _testid.toString(),
                 'callback_started_recording': function () { },
-                'callback_finished_recording': function () { },
+                'callback_finished_recording': function (e) { App.finished(e) },
                 'callback_stopped_recording': function () { },
+                'callback_finished_params': function(params){ App.showParameter(params) },
                 'callback_error_recording': function () { },
                 'callback_activityTime': function (time) { },
                 'callback_activityLevel': function (level) { }
             };
             $.jRecorder(settings, $("#record"));
-
-            $.jRecorder.record();
+        },
+        handleBtnStartRec: function () {
+            $.jRecorder.record(2);
+        },
+        HandleNextAudioCapture: function () {
+            
+        },
+        showParameter: function (params) {
+            console.log("params: " + params);
+            _audio[_active] = params;
         }
     }
     App.init();
