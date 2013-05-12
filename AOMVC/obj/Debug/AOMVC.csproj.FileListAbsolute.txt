@@ -74,3 +74,4 @@ C:\Users\Stefaan\Documents\ArticulatieOnderzoek\AOMVC\bin\System.Web.WebPages.xm
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\AOMVC\bin\System.Web.WebPages.Deployment.xml
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\AOMVC\bin\System.Web.WebPages.Razor.xml
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\AOMVC\bin\EntityFramework.xml
+C:\Users\Stefaan\Documents\ArticulatieOnderzoek\AOMVC\bin\Newtonsoft.Json.xml

@@ -5,26 +5,54 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    <title>Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+    <title>Test</title>
     @Styles.Render("~/Content/bootstrapnoresponsive")
     @Styles.Render("~/Content/Test")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <section id="startTest">
+        <h2>Start met de test</h2>
+        <button class="btn" type="button">Start</button>
+    </section>
     <h1 class="sentence"></h1>
     <ul class="unstyled images">
     </ul>
     <footer>
         <ul class="unstyled inline buttons">
-            <li><a href="#" title="fullscreen"><i class="icon-fullscreen"></i></a></li>
-            <li><a href="#" title="aanvulzin">Z</a></li>
-            <li><a href="#" title="start opnemen"><i class="icon-play"></i></a></li>
-            <li><a href="#"><i class="icon-resize-full"></i></a></li>
-            <li><a href="#"><i class="icon-resize-full"></i></a></li>
-            <li><a href="#"><i class="icon-resize-full"></i></a></li>
+            <li><a href="#" title="vorige" data-function="back"><i class="icon-arrow-left"></i></a></li>
+            <li><a href="#" title="fullscreen" data-function="fullscreen"><i class="icon-fullscreen"></i></a></li>
+            <li><a href="#" title="aanvulzin" data-function="sentence"><i class="icon-comment"></i></a></li>
+            <li><a href="#" title="voorbeeldfragment" data-function="playaudio"><i class="icon-play"></i></a></li>
+            <li><a href="#" title="pauzeer opnemen" data-function="pause"><i class="icon-pause"></i></a></li>
+            <li><a href="#" title="fout" data-function="wrong"><i class="icon-remove-circle"></i></a></li>
+            <li><a href="#" title="correct" data-function="correct"><i class="icon-ok-circle"></i></a></li>
+            <li><a href="#" title="volgende" data-function="next"><i class="icon-arrow-right"></i></a></li>
         </ul>
+        <p id="progress"></p>
     </footer>
+    <div id="setError">
+        <h3>Visuele fout</h3>
+        <div id="errors">
+            <label class="radio">
+                <input type="radio" name="error" id="error1" value="e1">
+                Interdentaal
+            </label>
+            <label class="radio">
+                <input type="radio" name="error" id="error2" value="e2">
+                Adentaal
+            </label>
+            <label class="radio">
+                <input type="radio" name="error" id="error3" value="e3">
+                Nog iets - dentaal
+            </label>
+        </div>
+    </div>
     <div id="record"></div>
+    <div class="overlay"></div>
+    <audio id="fragment" preload="auto">
+    </audio>
     <script>
         var routineid = @ViewBag.Routine;
         var _testid = @ViewBag.testid;

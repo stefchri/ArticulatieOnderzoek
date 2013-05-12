@@ -81,7 +81,6 @@ namespace AOMVC.Controllers
             return PartialView(childr);
         }
 
-        
         public ActionResult GetRoutines(int id)
         {
             var rout = Adapter.RoutineImageRepository.Find(c => c.RoutineId.Equals(id),null).OrderBy(c => c.ImageOrder).ToList();
@@ -92,6 +91,7 @@ namespace AOMVC.Controllers
                     {"Sentence", p.Image.Sentence},
                     {"Url", p.Image.Url},
                     {"Order", p.ImageOrder},
+                    {"Sound", p.Image.SoundUrl}
                 })
             );
             JObject jo = new JObject();

@@ -1,12 +1,14 @@
 ﻿var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
 var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
+var _soundFragmentPath = "http://" + window.location.host.toString() + "/sound/";
 var _swfPath = "http://" + window.location.host.toString() + "/Scripts/jRecorder.swf";
 var _timer;
 var _sentenceTimer;
 var _imgs;
 var _active = 0;
 var _audio = {};
+var _fragments = {};
 
 (function () {
     var App = {
@@ -16,26 +18,61 @@ var _audio = {};
         bindEvents: function () {
             this.getImagesInRoutine();
             $(window).resize(function (e) { App.handleResize(e); });
-            $("footer li").first().click(function (e) {
-                App.setFullScreen();
+            $(window).mousemove(function (e) { App.toggleFooter(e); });
+
+            $("#startTest button").click(function () {
+                App.startRecording();
             });
-            $("footer li:nth-of-type(2)").mousedown(function (e) {
-                App.showSentence(true, e);
+
+            $("footer li a").click(function (e) {
+                var funct = $(e.currentTarget).data("function");
+                switch (funct) {
+                    case "back":
+                        App.goTo(_active - 1);
+                        break;
+                    case "fullscreen":
+                        App.setFullScreen();
+                        break;
+                    case "sentence":
+                        //Do nothing, look at mouseup and down events
+                        break;
+                    case "playaudio":
+                        App.playFragment();
+                        break;
+                    case "pause":
+                        App.pauseRecording();
+                        break;
+                    case "wrong":
+                        App.markAnswer(false);
+                        break;
+                    case "correct":
+                        App.markAnswer(true);
+                        break;
+                    case "next":
+                        App.goTo(_active + 1);
+                        break;
+                    default:
+                        console.log("Function " + funct + " is not defined in footer."); 
+                        break;
+                }
             });
-            $("footer li:nth-of-type(2)").mouseup(function (e) {
-                App.showSentence(false, e);
+            $("footer li a").mouseup(function (e) {
+                if ($(e.currentTarget).data("function") == "sentence")
+                {
+                    App.showSentence(false, e);
+                }
             });
-            $("footer li:nth-of-type(3)").mouseup(function (e) {
-                App.handleBtnStartRec();
+            $("footer li a").mousedown(function (e) {
+                if ($(e.currentTarget).data("function") == "sentence") {
+                    App.showSentence(true, e);
+                }
             });
-            $("body").mousemove(function (e) {
-                App.toggleFooter();
-            });
-            $(window).keyup(function (e) {
+            $(window).keydown(function (e) {
                 App.handleKeyboard(e);
             });
-            this.startRecording();
+            this.initializeRecorder();
         },
+        //INIT
         getImagesInRoutine: function () {
             $.getJSON(_getImages, { "id": routineid }, function (data) {
                 _imgs = $.parseJSON(data).Images;
@@ -50,11 +87,16 @@ var _audio = {};
                     if (index == 0) {
                         $(".sentence").html(value.Sentence);
                     }
+                    _fragments[index] = value.Sound;
                 });
                 $(".images").append(list);
-                
+                $("#progress").html("1 / " + _imgs.length);
             });
+            var e = {};
+            e.currentTarget = window;
+            this.handleResize(e);
         },
+        //USER EVENTS VISUALS
         toggleFooter: function (e) {
             window.clearTimeout(_timer)
             $("footer").fadeIn(300);
@@ -63,14 +105,12 @@ var _audio = {};
         setFullScreen: function () {
             if (screenfull.enabled) {
                 screenfull.request();
-
             }
         },
         showSentence: function (bool, e) {
             if (bool) {
                 $(".sentence").fadeIn('fast');
                 _sentenceTimer = setTimeout(function () { $(".sentence").fadeOut('fast');}, 2000);
-                
             } else {
                 window.clearTimeout(_sentenceTimer);
                 $(".sentence").fadeOut('fast');
@@ -79,14 +119,15 @@ var _audio = {};
         },
         handleResize: function (e) {
             if (e.currentTarget.innerWidth < e.currentTarget.innerHeight) {
-                $("img").width("95%");
+                $("img").width("70%");
                 $("img").height("auto");
             }
             else {
-                $("img").height("95%");
+                $("img").height("70%");
                 $("img").width("auto");
             }   
         },
+        //HANDLE USER INPUT -- NAVIGATION
         handleKeyboard: function (ev) {
             var kCode;
             if (ev.keyCode)
@@ -97,28 +138,23 @@ var _audio = {};
             { kCode = ev.which; }
             if (kCode != undefined) {
                 switch (kCode) {
-                    //PREV
                     case 37: App.goTo(_active - 1);
                         break;
-                    //NEXT
                     case 39: App.goTo(_active + 1);
                         break;
                 }
             }
         },
         goTo: function (number) {
-            
             var l;
             if (0 <= number && number < _imgs.length) {
                 l = _imgs[number];
                 _active = number;
-                $.jRecorder.stop();
-                $.jRecorder.sendData();
-                App.HandleNextAudioCapture();
                 App.renderImage(l);
-            } 
-            
+                App.renderProgress(number + 1);
+            }
         },
+        //RENDERING 
         renderImage: function (image) {
             $(".sentence").html(image.Sentence);
             $(".images li").each(function (i, v) {
@@ -126,7 +162,20 @@ var _audio = {};
             });
             $(".images li:nth-of-type(" + image.Order + ")").addClass("active");
         },
-        startRecording: function () {
+        renderProgress: function(act) {
+            $("#progress").html(act + " / " + _imgs.length);
+        },
+        playFragment: function () {
+            var url = _fragments[_active];
+            var sound = document.createElement("source");
+            sound.src = _soundFragmentPath + url;
+            sound.type = "audio/wav";
+            $("#fragment").append(sound);
+            document.getElementById("fragment").play();
+            console.log(url);
+        },
+        //RECORDER HANDLERS
+        initializeRecorder: function () {
             var settings = {
                 'rec_width': '300',
                 'rec_height': '200',
@@ -136,7 +185,7 @@ var _audio = {};
                 'recorder_id': 'audiorecorder',
                 'recorder_name': 'audiorecorder',
                 'wmode': 'transparent',
-                'bgcolor': '#ff0000',
+                'bgcolor': '#000000',
                 'swf_path': _swfPath,
                 'host': _soundUploadPath + '?filename=' + _testid.toString(),
                 'callback_started_recording': function () { },
@@ -149,12 +198,21 @@ var _audio = {};
             };
             $.jRecorder(settings, $("#record"));
         },
-        handleBtnStartRec: function () {
-            $.jRecorder.record(2);
+        startRecording: function () {
+            $("#startTest").fadeOut('fast');
+            $(".overlay").fadeOut('fast');
+            $.jRecorder.record();
         },
-        HandleNextAudioCapture: function () {
-            
+        stopRecording: function () {
+            $.jRecorder.stop();
         },
+        sendData: function () {
+            $.jRecorder.sendData();
+        },
+        pauseRecording: function () {
+            $.jRecorder.pause();
+        },
+        //RECORDER CALLBACKS
         showParameter: function (params) {
             console.log("params: " + params);
             _audio[_active] = params;
@@ -162,13 +220,3 @@ var _audio = {};
     }
     App.init();
 }(window));
-
-
-
-
-
-
-
-
-
-

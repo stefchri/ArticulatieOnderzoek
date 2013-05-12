@@ -180,6 +180,12 @@
 							
 	} 
 	
+	$.jRecorder.pause = function () {
+
+	    getFlashMovie(jRecorderSettings['recorder_name']).jPauseRecorder();
+
+	}
+
 	$.jRecorder.callback_started_recording = function(){
 		
 	
