@@ -1,4 +1,10 @@
-﻿var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
+﻿//TODO:
+//
+//Fout selecteren en window manipuleren
+//pauzeerscherm inlassen(in goto)
+//
+
+var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
 var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
 var _soundFragmentPath = "http://" + window.location.host.toString() + "/sound/";
@@ -9,6 +15,7 @@ var _imgs;
 var _active = 0;
 var _audio = {};
 var _fragments = {};
+var _paused = false;
 
 (function () {
     var App = {
@@ -23,7 +30,9 @@ var _fragments = {};
             $("#startTest button").click(function () {
                 App.startRecording();
             });
-
+            $("#pause").click(function () {
+                App.resumeRecording();
+            });
             $("footer li a").click(function (e) {
                 var funct = $(e.currentTarget).data("function");
                 switch (funct) {
@@ -40,7 +49,11 @@ var _fragments = {};
                         App.playFragment();
                         break;
                     case "pause":
-                        App.pauseRecording();
+                        if (_paused) {
+                            App.resumeRecording();
+                        }else{
+                            App.pauseRecording();
+                        }
                         break;
                     case "wrong":
                         App.markAnswer(false);
@@ -206,11 +219,32 @@ var _fragments = {};
         stopRecording: function () {
             $.jRecorder.stop();
         },
-        sendData: function () {
-            $.jRecorder.sendData();
-        },
         pauseRecording: function () {
             $.jRecorder.pause();
+            $("footer a").each(function (ind,val) {
+                if ($(val).data("function") == "pause") {
+                    $(val).attr("title", "pauzeer test")
+                    $(val).find("i").first().removeClass("icon-pause").addClass("icon-play");
+                }
+            });
+            _paused = true;
+            $(".overlay").fadeIn();
+            $("#pause").fadeIn();
+        },
+        resumeRecording: function () {
+            $.jRecorder.resume();
+            $("footer a").each(function (ind, val) {
+                if ($(val).data("function") == "pause") {
+                    $(val).attr("title","herneem test")
+                    $(val).find("i").first().removeClass("icon-play").addClass("icon-pause");
+                }
+            });
+            _paused = false;
+            $(".overlay").fadeOut();
+            $("#pause").fadeOut();
+        },
+        sendData: function () {
+            $.jRecorder.sendData();
         },
         //RECORDER CALLBACKS
         showParameter: function (params) {

@@ -161,29 +161,27 @@
 								//change z-index to make it top
 								$(  '#' + jRecorderSettings['recorderlayout_id'] ).css('z-index', 1000);
 								getFlashMovie(jRecorderSettings['recorder_name']).jStartRecording(max_time);
-							
-							
-		
 						} 
 
 	//function call to stop recording					
 	$.jRecorder.stop = function(){
 					
 		getFlashMovie(jRecorderSettings['recorder_name']).jStopRecording();
-							
 	} 
 		
 	//function call to send wav data to server url from the init configuration					
 	$.jRecorder.sendData = function(){
 					
 		getFlashMovie(jRecorderSettings['recorder_name']).jSendFileToServer();
-							
 	} 
 	
 	$.jRecorder.pause = function () {
 
-	    getFlashMovie(jRecorderSettings['recorder_name']).jPauseRecorder();
+	    getFlashMovie(jRecorderSettings['recorder_name']).jPauseRecording();
+	}
+	$.jRecorder.resume = function () {
 
+	    getFlashMovie(jRecorderSettings['recorder_name']).jResumeRecording();
 	}
 
 	$.jRecorder.callback_started_recording = function(){
@@ -203,7 +201,6 @@
 	$.jRecorder.callback_error_recording = function(){
 		
 		jRecorderSettings['callback_error_recording']();
-		
 	}
 	
 	$.jRecorder.callback_stopped_recording = function(){
@@ -250,6 +247,3 @@
 
 	
 })(jQuery);
-
-
-

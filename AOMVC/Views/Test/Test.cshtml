@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    string testUrl = "http://" + HttpContext.Current.Request.Url.Host.ToString() + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port.ToString()) + "/Test";
 }
 <!DOCTYPE html>
 <html>
@@ -25,7 +26,7 @@
             <li><a href="#" title="fullscreen" data-function="fullscreen"><i class="icon-fullscreen"></i></a></li>
             <li><a href="#" title="aanvulzin" data-function="sentence"><i class="icon-comment"></i></a></li>
             <li><a href="#" title="voorbeeldfragment" data-function="playaudio"><i class="icon-play"></i></a></li>
-            <li><a href="#" title="pauzeer opnemen" data-function="pause"><i class="icon-pause"></i></a></li>
+            <li><a href="#" title="pauzeer test" data-function="pause"><i class="icon-pause"></i></a></li>
             <li><a href="#" title="fout" data-function="wrong"><i class="icon-remove-circle"></i></a></li>
             <li><a href="#" title="correct" data-function="correct"><i class="icon-ok-circle"></i></a></li>
             <li><a href="#" title="volgende" data-function="next"><i class="icon-arrow-right"></i></a></li>
@@ -48,6 +49,11 @@
                 Nog iets - dentaal
             </label>
         </div>
+    </div>
+    <div id="pause">
+        <h3>Test gepauzeerd</h3>
+        <button class="btn btn-danger" onclick="window.location='@testUrl'" title="Stop de test">Stop de test</button>
+        <button class="btn btn-success" id="resume" title="Ga verder">Ga verder met de test</button>
     </div>
     <div id="record"></div>
     <div class="overlay"></div>
