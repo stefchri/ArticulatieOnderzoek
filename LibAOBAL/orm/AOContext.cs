@@ -9,7 +9,6 @@ namespace LibAOBAL.orm
     {
         public IDbSet<Admin> Admins { get; set; }
         public IDbSet<Error> Errors { get; set; }
-        public IDbSet<ErrorCategory> ErrorCategories { get; set; }
         public IDbSet<Image> Images { get; set; }
         public IDbSet<Routine> Routines { get; set; }
         public IDbSet<RoutineImage> RoutineImages { get; set; }
@@ -91,31 +90,44 @@ namespace LibAOBAL.orm
                 .IsRequired()
                 .HasMaxLength(255);
             modelBuilder.Entity<Error>()
-                .Property(a => a.Description)
-                .HasColumnName("error_description")
-                .IsOptional();
-            modelBuilder.Entity<Error>()
-                .Property(c => c.ErrorCategoryID)
-                .HasColumnName("category_id")
-                .IsRequired();
-            modelBuilder.Entity<Error>()
-                .HasRequired(c => c.ErrorCategory)
-                .WithMany(c => c.ErrorsInCategory)
-                .HasForeignKey(s => s.ErrorCategoryID);
+                .HasMany(e => e.Results)
+                .WithMany(e => e.Errors)
+                .Map(m =>
+                    {
+                        m.ToTable("results_has_errors");
+                        m.MapLeftKey("result_id");
+                        m.MapRightKey("error_id");
+                    }
+                );
             modelBuilder.Entity<Error>().ToTable("error");
 
-            //ERRORCATEGORIES
-            modelBuilder.Entity<ErrorCategory>().HasKey(d => d.ID);
-            modelBuilder.Entity<ErrorCategory>()
+            //RESULTS
+            modelBuilder.Entity<Result>().HasKey(d => d.ID);
+            modelBuilder.Entity<Result>()
                 .Property(a => a.ID)
-                .HasColumnName("category_id")
+                .HasColumnName("result_id")
                 .IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<ErrorCategory>()
-                .Property(a => a.Name)
-                .HasColumnName("category_name")
-                .IsRequired()
-                .HasMaxLength(255);
-            modelBuilder.Entity<Error>().ToTable("errorcategories");
+            modelBuilder.Entity<Result>()
+                .Property(a => a.Order)
+                .HasColumnName("test_order");
+            modelBuilder.Entity<Result>()
+                .Property(a => a.AudioSource)
+                .HasColumnName("result_audiosource");
+            modelBuilder.Entity<Result>()
+                .Property(a => a.Phonetic)
+                .HasColumnName("result_phonetic");
+            modelBuilder.Entity<Result>()
+                .Property(a => a.Value)
+                .HasColumnName("result_value");
+            modelBuilder.Entity<Result>()
+                .Property(c => c.TestID)
+                .HasColumnName("test_id")
+                .IsRequired();
+            modelBuilder.Entity<Result>()
+                .HasRequired(c => c.Test)
+                .WithMany(c => c.Results)
+                .HasForeignKey(s => s.TestID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Result>().ToTable("results");
 
             //IMAGES
             modelBuilder.Entity<Image>().HasKey(d => d.ID);
@@ -261,6 +273,10 @@ namespace LibAOBAL.orm
             modelBuilder.Entity<Test>()
                 .Property(a => a.Analyseddate)
                 .HasColumnName("test_analyseddate")
+                .IsOptional();
+            modelBuilder.Entity<Test>()
+                .Property(a => a.Comment)
+                .HasColumnName("test_comment")
                 .IsOptional();
             modelBuilder.Entity<Test>()
                 .Property(c => c.AdminID)

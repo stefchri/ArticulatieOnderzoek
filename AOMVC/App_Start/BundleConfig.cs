@@ -48,6 +48,7 @@ namespace AOMVC
             bundles.Add(new ScriptBundle("~/bundles/test").Include(
                         "~/Scripts/jRecorder.js",
                         "~/Scripts/fullscreen.js",
+                        "~/Scripts/tinymce/tiny_mce.js",
                         "~/Scripts/test.js"
                         ));
 

@@ -8,6 +8,7 @@ var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
 var _soundFragmentPath = "http://" + window.location.host.toString() + "/sound/";
 var _swfPath = "http://" + window.location.host.toString() + "/Scripts/jRecorder.swf";
+var _finalizePath = "http://" + window.location.host.toString() + "/Test/Finalize";
 var _timer;
 var _sentenceTimer;
 var _imgs;
@@ -16,6 +17,8 @@ var _audio = {};
 var _fragments = {};
 var _paused = false;
 var _errors = {};
+var _results = {};
+var _comment;
 
 (function () {
     var App = {
@@ -93,6 +96,9 @@ var _errors = {};
             $("#noMicrophone > p:first-of-type").click(function () {
                 App.closeMicrophoneDialog();
             });
+            $("#comment button").click(function () {
+                App.finalizeTest();
+            });
             $(window).keydown(function (e) {
                 App.handleKeyboard(e);
             });
@@ -168,6 +174,10 @@ var _errors = {};
                         break;
                     case 39: App.goTo(_active + 1);
                         break;
+                    case 32: App.markAnswer(true);
+                        break;
+                    case 13: App.markAnswer(false);
+                        break;
                 }
             }
         },
@@ -181,7 +191,33 @@ var _errors = {};
                 App.resetErrorList();
                 App.renderImage(l);
                 App.renderProgress(number + 1);
+                _results[_active] = true;
                 //App.startRecording();
+            }
+            else if (number == _imgs.length) {
+                _active = number;
+                _results[_active] = true;
+                App.stopRecording();
+                App.showWYSIWYG();
+            }
+        },
+        markAnswer: function (score) {
+            var pos = _active + 1;
+            if (pos != _imgs.length) {
+                l = _imgs[pos];
+                _active++;
+                App.stopRecording();
+                //App.sendData();
+                App.resetErrorList();
+                App.renderImage(l);
+                App.renderProgress(_active + 1);
+                _results[_active] = score;
+            }
+            else {
+                _active++;
+                _results[_active] = score;
+                App.stopRecording();
+                App.showWYSIWYG();
             }
         },
         showVisualError: function(){
@@ -234,6 +270,19 @@ var _errors = {};
             document.getElementById("fragment").play();
             console.log(url);
         },
+        showWYSIWYG: function () {
+            $(".images").css({ "display": "none" });
+            $("#comment").show();
+            $(".overlay").show();
+            tinymce.init({
+                selector: "textarea#comment_field",
+                theme: "advanced",
+                width: 800,
+                height: 400,
+                //content_css: "css/content.css",
+                toolbar: "undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | hr code",
+            });
+        },
         //RECORDER HANDLERS
         initializeRecorder: function () {
             var settings = {
@@ -261,7 +310,7 @@ var _errors = {};
         startRecording: function () {
             $("#startTest").fadeOut('fast');
             $(".overlay").fadeOut('fast');
-            $.jRecorder.record(99999999);
+            $.jRecorder.record();
         },
         stopRecording: function () {
             $.jRecorder.stop();
@@ -297,6 +346,30 @@ var _errors = {};
         showParameter: function (params) {
             console.log("params: " + params);
             _audio[_active] = params;
+        },
+
+
+        finalizeTest: function () {
+            _comment = tinyMCE.activeEditor.getContent();
+            var formData = new FormData();
+            formData.append("comment", _comment);
+            formData.append("errors", JSON.stringify(_errors));
+            formData.append("audio", JSON.stringify(_audio));
+            formData.append("results", JSON.stringify(_results));
+            formData.append("test_id", _testid);
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (evt) {
+                console.log("success");
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error finalizing the test.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The finalizing has been canceled by the user or the browser dropped the connection.");
+            }, false);
+
+            xhr.open("POST", _finalizePath);
+            xhr.send(formData);
         }
     }
     App.init();

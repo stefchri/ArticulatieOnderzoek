@@ -1,0 +1,6 @@
+todo:
+Test start -> check voor geen kinderen, routines -> niet mogelijk starten!
+Test geluid -> alleen header wav?
+
+database fouten addentaal en interdentaal nog toevoegen
+checken inserts

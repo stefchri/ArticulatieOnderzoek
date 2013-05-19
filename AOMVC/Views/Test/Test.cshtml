@@ -50,10 +50,6 @@
                 <input type="radio" name="error" id="error2" value="e2">
                 Adentaal
             </label>
-            <label class="radio">
-                <input type="radio" name="error" id="error3" value="e3">
-                Nog iets - dentaal
-            </label>
         </div>
     </div>
     <div id="noMicrophone">
@@ -78,6 +74,11 @@
     <div class="overlay"></div>
     <audio id="fragment" preload="auto">
     </audio>
+    <div id="comment">
+        <h3>Eerste opmerkingen of bijzonderheden</h3>
+        <textarea id="comment_field"></textarea>
+        <button class="btn-success btn" title="opslagen en afsluiten">Opslagen en afsluiten</button>
+    </div>
     <script>
         var routineid = @ViewBag.Routine;
         var _testid = @ViewBag.testid;

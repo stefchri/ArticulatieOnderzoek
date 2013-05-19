@@ -199,3 +199,20 @@ footer #progress {
     -webkit-user-select: none;
     user-select: none;
 }
+#comment {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    width: 800px;
+    margin-left: -421px;
+    height: 550px;
+    padding: 20px;
+    background-color: #A9A9A9;
+    border: 1px solid #3A3A3A;
+    border-radius: 5px;
+    z-index: 400;
+}
+#comment button {
+    margin-top: 25px;
+}

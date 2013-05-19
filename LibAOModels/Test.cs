@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace LibAOModels
 {
@@ -24,9 +25,12 @@ namespace LibAOModels
         public Int32 RoutineID { get; set; }
         [Required]
         public string Kind { get; set; }    //Normal, repeat, finish(sentence)
+        [AllowHtml]
+        public string Comment { get; set; }    
 
         public virtual Admin Admin { get; set; }
         public virtual User User { get; set; }
         public virtual Routine Routine { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
     }
 }

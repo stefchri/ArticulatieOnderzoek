@@ -12,11 +12,6 @@ namespace LibAOModels
         public Int64 ID { get; set; }
         [Required]
         public string Name { get; set; }
-        public string Description { get; set; }
-        [Required]
-        public Int32 ErrorCategoryID { get; set; }
-
-
-        public virtual ErrorCategory ErrorCategory { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
     }
 }

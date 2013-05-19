@@ -6,3 +6,4 @@ C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\ExtensionMethods\bin\Debug\Exte
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\ExtensionMethods\bin\Debug\ExtensionMethods.pdb
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\ExtensionMethods\obj\Debug\ExtensionMethods.dll
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\ExtensionMethods\obj\Debug\ExtensionMethods.pdb
+C:\Users\Stefaan\Documents\ArticulatieOnderzoek\ExtensionMethods\obj\Debug\ExtensionMethods.csprojResolveAssemblyReference.cache

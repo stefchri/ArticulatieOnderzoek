@@ -11,6 +11,7 @@ using LibAOModels;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Text;
+using System.Web.Script.Serialization;
 
 namespace AOMVC.Controllers
 {
@@ -129,6 +130,92 @@ namespace AOMVC.Controllers
             }
             
             return Content(name);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult Finalize(string comment, string errors, string audio, string results, int? test_id) 
+        {
+            Test test = Adapter.TestRepository.GetByID(test_id);
+            test.Comment = comment;
+            test.Finisheddate = DateTime.UtcNow;
+            test.Modifieddate = DateTime.UtcNow;
+            Adapter.TestRepository.Update(test);
+            Adapter.Save();
+
+            //VISUAL ERRORS => e1: Interdentaal
+            //              => e2: Addentaal
+            Dictionary<int, string> errorList = new Dictionary<int, string>();
+            var jss = new JavaScriptSerializer();
+            dynamic data = jss.Deserialize<dynamic>(errors);
+            foreach (var au in data)
+            {
+                string val = au.Value.ToString();
+                string error_type;
+                switch (val)
+                {
+                    case "e1":
+                        error_type = "Interdentaal";
+                        break;
+                    case "e2":
+                        error_type = "Addentaal";
+                        break;
+                    default:
+                        error_type = "";
+                        break;
+                }
+                if (!String.IsNullOrEmpty(error_type))
+                {
+                    errorList.Add(Convert.ToInt32(au.Key), error_type);
+                }
+            }
+            errorList.OrderBy(a => a.Key);
+
+
+            Dictionary<int, string> soundPaths = new Dictionary<int, string>();
+            jss = new JavaScriptSerializer();
+            data = jss.Deserialize<dynamic>(audio);
+            foreach (var au in data)
+	        {
+                soundPaths.Add(Convert.ToInt32(au.Key), au.Value.ToString());
+	        }
+            soundPaths.OrderBy(a => a.Key);
+
+
+            Dictionary<int, short> res = new Dictionary<int, short>();
+            jss = new JavaScriptSerializer();
+            data = jss.Deserialize<dynamic>(results);
+            foreach (var au in data)
+            {
+                if (au.Value)
+                {
+                    res.Add(Convert.ToInt32(au.Key), 1);
+                }
+                else {
+                    res.Add(Convert.ToInt32(au.Key), 0);
+                }
+            }
+            res.OrderBy(a => a.Key);
+
+            foreach (var sp in soundPaths)
+	        {
+		        Result result = new Result();
+                result.TestID = test.ID;
+                result.AudioSource = sp.Value + ".wav";
+                result.Order = sp.Key;
+                try
+                {
+                    string error = errorList[sp.Key].ToString();
+                    Error err = Adapter.ErrorRepository.Find(e => e.Name.Equals(error), null).First();
+                    result.Errors.Add(err);
+                }
+                catch (Exception)
+                {
+                    //NO ERRORS
+                }
+                result.Value = res[sp.Key];
+	        }
+            
+            return Content("success");
         }
     }
 }

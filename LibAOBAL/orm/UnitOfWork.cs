@@ -14,7 +14,6 @@ namespace LibAOBAL.orm
         private AOContext context = new AOContext();
         private GenericRepository<Admin> _adminRepository;
         private GenericRepository<Error> _errorRepository;
-        private GenericRepository<ErrorCategory> _errorCategoryRepository;
         private GenericRepository<Image> _imageRepository;
         private GenericRepository<Routine> _routineRepository;
         private GenericRepository<RoutineImage> _routineImageRepository;
@@ -44,19 +43,6 @@ namespace LibAOBAL.orm
                     this._errorRepository = new GenericRepository<Error>(context);
                 }
                 return _errorRepository;
-            }
-        }
-
-        public GenericRepository<ErrorCategory> ErrorCategoryRepository
-        {
-            get
-            {
-
-                if (this._errorCategoryRepository == null)
-                {
-                    this._errorCategoryRepository = new GenericRepository<ErrorCategory>(context);
-                }
-                return _errorCategoryRepository;
             }
         }
 
