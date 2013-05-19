@@ -29,13 +29,19 @@
             <li><a href="#" title="pauzeer test" data-function="pause"><i class="icon-pause"></i></a></li>
             <li><a href="#" title="fout" data-function="wrong"><i class="icon-remove-circle"></i></a></li>
             <li><a href="#" title="correct" data-function="correct"><i class="icon-ok-circle"></i></a></li>
+            <li><a href="#" title="visuele fout" data-function="visualError"><i class="icon-eye-open"></i></a></li>
             <li><a href="#" title="volgende" data-function="next"><i class="icon-arrow-right"></i></a></li>
         </ul>
         <p id="progress"></p>
     </footer>
     <div id="setError">
+        <p>X</p>
         <h3>Visuele fout</h3>
         <div id="errors">
+            <label class="radio">
+                <input type="radio" name="error" id="noerror" value="0" checked="checked">
+                Geen visuele fout
+            </label>
             <label class="radio">
                 <input type="radio" name="error" id="error1" value="e1">
                 Interdentaal
@@ -50,6 +56,19 @@
             </label>
         </div>
     </div>
+    <div id="noMicrophone">
+        <p>X</p>
+        <h3>Er is geen microfoon gevonden</h3>
+        <p>
+            Check de microfoon of connecteer een microfoon aan de computer. 
+            Indien de microfoon toch correct aangesloten zou zijn, check dan of je Flash toelaat om je microfoon te gebruiken.
+            Je kan de globale instellingen <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager02.html" target="_blank" title="Flash instellingen">hier</a> wijzigen.
+        </p>
+        <p>
+            Herlaad de pagina als de microfoon goed ingesteld is, aangekoppeld is of als je de globale instellingen voor Flash hebt veranderd.
+        </p>
+    </div>
+    
     <div id="pause">
         <h3>Test gepauzeerd</h3>
         <button class="btn btn-danger" onclick="window.location='@testUrl'" title="Stop de test">Stop de test</button>

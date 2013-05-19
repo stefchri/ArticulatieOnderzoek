@@ -1,6 +1,5 @@
 ﻿//TODO:
 //
-//Fout selecteren en window manipuleren
 //pauzeerscherm inlassen(in goto)
 //
 
@@ -16,6 +15,7 @@ var _active = 0;
 var _audio = {};
 var _fragments = {};
 var _paused = false;
+var _errors = {};
 
 (function () {
     var App = {
@@ -64,6 +64,9 @@ var _paused = false;
                     case "next":
                         App.goTo(_active + 1);
                         break;
+                    case "visualError":
+                        App.showVisualError();
+                        break;
                     default:
                         console.log("Function " + funct + " is not defined in footer."); 
                         break;
@@ -79,6 +82,16 @@ var _paused = false;
                 if ($(e.currentTarget).data("function") == "sentence") {
                     App.showSentence(true, e);
                 }
+            });
+            var rbl = document.getElementsByName("error");
+            $(rbl).change(function () {
+                App.hideVisualErrors();
+            });
+            $("#setError p").click(function () {
+                App.closeErrorDialog();
+            });
+            $("#noMicrophone > p:first-of-type").click(function () {
+                App.closeMicrophoneDialog();
             });
             $(window).keydown(function (e) {
                 App.handleKeyboard(e);
@@ -113,7 +126,7 @@ var _paused = false;
         toggleFooter: function (e) {
             window.clearTimeout(_timer)
             $("footer").fadeIn(300);
-            _timer = setTimeout(function () { $("footer").fadeOut(300); }, 1000);
+            _timer = setTimeout(function () { $("footer").fadeOut(300); }, 500);
         },
         setFullScreen: function () {
             if (screenfull.enabled) {
@@ -163,9 +176,43 @@ var _paused = false;
             if (0 <= number && number < _imgs.length) {
                 l = _imgs[number];
                 _active = number;
+                App.stopRecording();
+                //App.sendData();
+                App.resetErrorList();
                 App.renderImage(l);
                 App.renderProgress(number + 1);
+                //App.startRecording();
             }
+        },
+        showVisualError: function(){
+            $("#setError").fadeIn();
+        },
+        hideVisualErrors: function(e, item) {
+            $("#setError").fadeOut();
+            var error = document.getElementsByName("error");
+            for (var elem in error) {
+                if (error[elem].checked) {
+                    _errors[_active] = error[elem].value;
+                }
+            }
+            
+            
+        },
+        resetErrorList: function () {
+            //Reset Errorlist
+            var error = document.getElementsByName("error");
+            for (var elem in error) {
+                if (error[elem].value == "0") {
+                    error[elem].checked = true;
+                }
+            }
+        },
+        closeErrorDialog: function () {
+            $("#setError").fadeOut();
+        },
+        closeMicrophoneDialog: function () {
+            $("#noMicrophone").fadeOut();
+            $(".overlay").fadeOut();
         },
         //RENDERING 
         renderImage: function (image) {
@@ -190,10 +237,10 @@ var _paused = false;
         //RECORDER HANDLERS
         initializeRecorder: function () {
             var settings = {
-                'rec_width': '300',
-                'rec_height': '200',
-                'rec_top': '40%',
-                'rec_left': '40%',
+                'rec_width': '150',
+                'rec_height': '100',
+                'rec_top': '0%',
+                'rec_left': '0%',
                 'recorderlayout_id': 'flashrecarea',
                 'recorder_id': 'audiorecorder',
                 'recorder_name': 'audiorecorder',
@@ -205,7 +252,7 @@ var _paused = false;
                 'callback_finished_recording': function (e) { App.finished(e) },
                 'callback_stopped_recording': function () { },
                 'callback_finished_params': function(params){ App.showParameter(params) },
-                'callback_error_recording': function () { },
+                'callback_error_recording': function () { console.log("Error rec")},
                 'callback_activityTime': function (time) { },
                 'callback_activityLevel': function (level) { }
             };
@@ -214,7 +261,7 @@ var _paused = false;
         startRecording: function () {
             $("#startTest").fadeOut('fast');
             $(".overlay").fadeOut('fast');
-            $.jRecorder.record();
+            $.jRecorder.record(99999999);
         },
         stopRecording: function () {
             $.jRecorder.stop();

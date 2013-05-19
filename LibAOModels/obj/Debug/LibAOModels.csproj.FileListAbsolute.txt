@@ -1,11 +1,3 @@
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.pdb
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.ClientValidation.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\WebActivator.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.csprojResolveAssemblyReference.cache
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.pdb
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.dll
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.pdb
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.ClientValidation.dll
@@ -14,3 +6,10 @@ C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\WebActivat
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.csprojResolveAssemblyReference.cache
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.dll
 C:\Users\Stefaan\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.pdb
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.dll
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOModels.pdb
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.ClientValidation.dll
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.dll
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\WebActivator.dll
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.dll
+C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.pdb

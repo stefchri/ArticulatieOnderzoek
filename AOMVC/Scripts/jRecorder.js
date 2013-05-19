@@ -156,12 +156,20 @@
 	
 	//function call to start a recording
 	$.jRecorder.record = function(max_time){
-		
-		
-								//change z-index to make it top
-								$(  '#' + jRecorderSettings['recorderlayout_id'] ).css('z-index', 1000);
-								getFlashMovie(jRecorderSettings['recorder_name']).jStartRecording(max_time);
-						} 
+	    try {
+	        $('#' + jRecorderSettings['recorderlayout_id']).css('z-index', 1000);
+	        getFlashMovie(jRecorderSettings['recorder_name']).jStartRecording(max_time);
+	    } catch (e) {
+	        var r = confirm("Geen microfoon gevonden, klik OK om de pagina te herladen.");
+	        if (r) {
+	            window.location = window.location;
+	        }
+	        else {
+	            $(".overlay").fadeIn("fast");
+	            $("#noMicrophone").fadeIn("fast");
+	        }
+	    }
+	} 
 
 	//function call to stop recording					
 	$.jRecorder.stop = function(){
