@@ -4,6 +4,7 @@
 //
 
 var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
+var _finished = "http://" + window.location.host.toString() + "/Test/";
 var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
 var _soundFragmentPath = "http://" + window.location.host.toString() + "/sound/";
@@ -19,6 +20,7 @@ var _paused = false;
 var _errors = {};
 var _results = {};
 var _comment;
+var started = false;
 
 (function () {
     var App = {
@@ -32,6 +34,7 @@ var _comment;
 
             $("#startTest button").click(function () {
                 App.startRecording();
+                started = true;
             });
             $("#pause").click(function () {
                 App.resumeRecording();
@@ -161,23 +164,25 @@ var _comment;
         },
         //HANDLE USER INPUT -- NAVIGATION
         handleKeyboard: function (ev) {
-            var kCode;
-            if (ev.keyCode)
-            { kCode = ev.keyCode; }
-            else if (ev.charCode)
-            { kCode = ev.charCode; }
-            else
-            { kCode = ev.which; }
-            if (kCode != undefined) {
-                switch (kCode) {
-                    case 37: App.goTo(_active - 1);
-                        break;
-                    case 39: App.goTo(_active + 1);
-                        break;
-                    case 32: App.markAnswer(true);
-                        break;
-                    case 13: App.markAnswer(false);
-                        break;
+            if (started) {
+                var kCode;
+                if (ev.keyCode)
+                { kCode = ev.keyCode; }
+                else if (ev.charCode)
+                { kCode = ev.charCode; }
+                else
+                { kCode = ev.which; }
+                if (kCode != undefined) {
+                    switch (kCode) {
+                        case 37: App.goTo(_active - 1);
+                            break;
+                        case 39: App.goTo(_active + 1);
+                            break;
+                        case 32: App.markAnswer(true);
+                            break;
+                        case 13: App.markAnswer(false);
+                            break;
+                    }
                 }
             }
         },
@@ -228,7 +233,7 @@ var _comment;
             var error = document.getElementsByName("error");
             for (var elem in error) {
                 if (error[elem].checked) {
-                    _errors[_active] = error[elem].value;
+                    _errors[_active + 1] = error[elem].value;
                 }
             }
             
@@ -359,7 +364,9 @@ var _comment;
             formData.append("test_id", _testid);
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", function (evt) {
-                console.log("success");
+                if (evt.currentTarget.responseText == "success") {
+                    window.location = _finished;
+                }
             }, false);
             xhr.addEventListener("error", function (evt) {
                 console.log("There was an error finalizing the test.");

@@ -1,8 +1,10 @@
 ﻿using LibAOModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
+using System.Data.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ namespace LibAOBAL.orm
         private AOContext context = new AOContext();
         private GenericRepository<Admin> _adminRepository;
         private GenericRepository<Error> _errorRepository;
+        private GenericRepository<Result> _resultRepository;
         private GenericRepository<Image> _imageRepository;
         private GenericRepository<Routine> _routineRepository;
         private GenericRepository<RoutineImage> _routineImageRepository;
@@ -43,6 +46,19 @@ namespace LibAOBAL.orm
                     this._errorRepository = new GenericRepository<Error>(context);
                 }
                 return _errorRepository;
+            }
+        }
+
+        public GenericRepository<Result> ResultRepository
+        {
+            get
+            {
+
+                if (this._resultRepository == null)
+                {
+                    this._resultRepository = new GenericRepository<Result>(context);
+                }
+                return _resultRepository;
             }
         }
 
@@ -124,6 +140,12 @@ namespace LibAOBAL.orm
                 l++;
             }
             catch (DbUpdateException ex)
+            {
+                var m = ex.InnerException;
+                var l = 3;
+                l++;
+            }
+            catch (OptimisticConcurrencyException ex)
             {
                 var m = ex.InnerException;
                 var l = 3;

@@ -51,15 +51,42 @@ namespace AOMVC.Controllers
 
         public ActionResult ToAnalyse()
         {
-            return View();
+            int id = MVCExtensions.getCurrentAdmin().ID;
+            List<Test> tests = Adapter.TestRepository.GetAll().ToList();
+            tests = tests.Where(t => t.AdminID == id).ToList();
+            tests = tests.Where(t => t.Analyseddate == null).Where(t => t.Finisheddate != null).Where(t => t.Deleteddate == null).OrderBy(t => t.Finisheddate).ToList();
+            return View(tests);
         }
 
+        [HttpPost]
+        public ActionResult Delete(long id)
+        {
+            Test test = Adapter.TestRepository.GetByID(id);
+            var admId = MVCExtensions.getCurrentAdmin().ID;
+            if (admId == test.AdminID)
+            {
+                return Content("200");
+            }
+            return Content("401");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteConfirmed(long id)
+        {
+            Test test = Adapter.TestRepository.GetByID(id);
+            test.Deleteddate = DateTime.UtcNow;
+            Adapter.TestRepository.Update(test);
+            Adapter.Save();
+            return Content("200");
+        }
 
         public ActionResult Analyse(long id)
         {
             return View();
         }
-        public ActionResult Test(int routine, int child, string kind)
+
+
+        public ActionResult Test(int routine, int child, string kind, string stats)
         {
             ViewBag.Child = child;
             ViewBag.Routine = routine;
@@ -69,7 +96,7 @@ namespace AOMVC.Controllers
             test.Kind = kind;
             test.RoutineID = routine;
             test.UserID = child;
-
+            test.ForStatistics = Convert.ToInt16(stats);
             Adapter.TestRepository.Insert(test);
             Adapter.Save();
             ViewBag.testid = test.ID;
@@ -196,25 +223,46 @@ namespace AOMVC.Controllers
             }
             res.OrderBy(a => a.Key);
 
+
+            //TEMPORARILY BECAUSE SOUNDUPLOAD ACTS WEIIIRD
+            if (res.Count() != soundPaths.Count())
+            {
+                soundPaths.Remove(0);
+            }
+
+            List<Result> finalResults = new List<Result>();
             foreach (var sp in soundPaths)
 	        {
+                
 		        Result result = new Result();
                 result.TestID = test.ID;
                 result.AudioSource = sp.Value + ".wav";
                 result.Order = sp.Key;
+                if (result.Errors == null)
+                {
+                    result.Errors = new List<Error>();
+                }
                 try
                 {
                     string error = errorList[sp.Key].ToString();
-                    Error err = Adapter.ErrorRepository.Find(e => e.Name.Equals(error), null).First();
-                    result.Errors.Add(err);
+                    List<Error> err = Adapter.ErrorRepository.GetAll().ToList();
+                    Error e = err.Find(r => r.Name.Contains(error));
+                    result.Errors.Add(e);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //NO ERRORS
+                    var kug = "ererer";
                 }
                 result.Value = res[sp.Key];
-	        }
+                finalResults.Add(result);
+            }
+
+            foreach (Result item in finalResults)
+            {
+                Adapter.ResultRepository.Insert(item);
+            }
             
+            Adapter.Save();
             return Content("success");
         }
     }

@@ -39,7 +39,10 @@ function getMessage() {
         case "routinecreate": output = "Module succesvol aangemaakt.";
             break;
         case "routineedit": output = "Module succesvol aangepast.";
-            break;        
+            break;
+        case "testdeleted": output = "Test succesvol verwijderd.";
+            break;
+            
     }
     showAlert(output);
 }

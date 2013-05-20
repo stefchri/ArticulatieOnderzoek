@@ -567,6 +567,8 @@
     <Content Include="Views\Shared\DisplayTemplates\ShortDateTime.cshtml" />
     <Content Include="Views\Test\Children.cshtml" />
     <Content Include="Views\Test\Test.cshtml" />
+    <Content Include="Views\Test\ToAnalyse.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\LocalDatetime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

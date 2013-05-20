@@ -9,6 +9,7 @@ namespace LibAOBAL.orm
     {
         public IDbSet<Admin> Admins { get; set; }
         public IDbSet<Error> Errors { get; set; }
+        public IDbSet<Result> Results { get; set; }
         public IDbSet<Image> Images { get; set; }
         public IDbSet<Routine> Routines { get; set; }
         public IDbSet<RoutineImage> RoutineImages { get; set; }
@@ -89,17 +90,7 @@ namespace LibAOBAL.orm
                 .HasColumnName("error_name")
                 .IsRequired()
                 .HasMaxLength(255);
-            modelBuilder.Entity<Error>()
-                .HasMany(e => e.Results)
-                .WithMany(e => e.Errors)
-                .Map(m =>
-                    {
-                        m.ToTable("results_has_errors");
-                        m.MapLeftKey("result_id");
-                        m.MapRightKey("error_id");
-                    }
-                );
-            modelBuilder.Entity<Error>().ToTable("error");
+            modelBuilder.Entity<Error>().ToTable("errors");
 
             //RESULTS
             modelBuilder.Entity<Result>().HasKey(d => d.ID);
@@ -127,6 +118,16 @@ namespace LibAOBAL.orm
                 .HasRequired(c => c.Test)
                 .WithMany(c => c.Results)
                 .HasForeignKey(s => s.TestID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Result>()
+                .HasMany(e => e.Errors)
+                .WithMany(e => e.Results)
+                .Map(m =>
+                {
+                    m.ToTable("results_has_errors");
+                    m.MapLeftKey("result_id");
+                    m.MapRightKey("error_id");
+                }
+            );
             modelBuilder.Entity<Result>().ToTable("results");
 
             //IMAGES
@@ -277,6 +278,10 @@ namespace LibAOBAL.orm
             modelBuilder.Entity<Test>()
                 .Property(a => a.Comment)
                 .HasColumnName("test_comment")
+                .IsOptional();
+            modelBuilder.Entity<Test>()
+                .Property(a => a.ForStatistics)
+                .HasColumnName("test_forstatistics")
                 .IsOptional();
             modelBuilder.Entity<Test>()
                 .Property(c => c.AdminID)

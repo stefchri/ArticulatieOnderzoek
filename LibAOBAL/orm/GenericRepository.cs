@@ -112,6 +112,10 @@ namespace LibAOBAL.orm
             IDbSet.Remove(entityToDelete);
         }
 
+        //public virtual void Refresh()
+        //{
+        //    context.Entry(new object()).CurrentValues.SetValues(entity
+        //}
 
         //INCLUDE COMPLEX PROPERTIES = VIRTUAL KEYWORD (PRIVATE)
         private static IQueryable<T> PerformInclusions(string includeProperties,

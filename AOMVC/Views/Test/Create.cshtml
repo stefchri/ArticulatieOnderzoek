@@ -37,6 +37,10 @@
 <input type="radio" name="kind" value="repeat" id="repeat" class="inlinerbl" /><label for="repeat" class="inlinelabel">Herhalen</label><br />
 <input type="radio" name="kind" value="sentence" id="sentence" class="inlinerbl" /><label for="sentence" class="inlinelabel">Aanvulzin</label><br />
 
+<h2>Normering</h2>
+<input type="radio" name="stats" value="1" class="inlinerbl" id="ja" checked="checked" /><label for="ja" class="inlinelabel">Voor de normering</label><br />
+<input type="radio" name="stats" value="0" class="inlinerbl" id="nee" /><label for="nee" class="inlinelabel">Niet voor de normering</label><br />
+
 <hr />
 <div class="actionlink">
     <button class="btn" onclick="window.location='@Url.Action("Index")'" title="Terug naar lijst">Terug naar lijst</button>
@@ -63,7 +67,8 @@
             var rout = $(".routines").find(".chosenRoutine").first().data("id");
             var child = $(".children").find(".selectedChild").first().data("id");
             var kind = $('input[name=kind]:checked').val();
-            window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child +"&kind=" + kind;
+            var stat = $('input[name=stats]:checked').val();
+            window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child +"&kind=" + kind + "&stats=" + stat;
         }
     </script>
 }

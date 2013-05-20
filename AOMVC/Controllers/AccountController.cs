@@ -146,7 +146,7 @@ namespace AOMVC.Controllers
         public ActionResult AdminInfo()
         {
             Admin admin = MVCExtensions.getCurrentAdmin();
-            int toAnalyse = admin.Tests.Where(t => !t.Analyseddate.HasValue).Count();
+            int toAnalyse = admin.Tests.Where(t => !t.Analyseddate.HasValue).Where(t => t.Finisheddate.HasValue).Count();
             int toFinish = admin.Tests.Where(t => !t.Finisheddate.HasValue).Count();
             ViewBag.toAnalyse = toAnalyse;
             ViewBag.toFinish = toFinish;

@@ -26,7 +26,8 @@ namespace LibAOModels
         [Required]
         public string Kind { get; set; }    //Normal, repeat, finish(sentence)
         [AllowHtml]
-        public string Comment { get; set; }    
+        public string Comment { get; set; }
+        public Int16 ForStatistics { get; set; }
 
         public virtual Admin Admin { get; set; }
         public virtual User User { get; set; }
