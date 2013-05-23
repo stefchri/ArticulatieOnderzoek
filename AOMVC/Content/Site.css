@@ -42,6 +42,25 @@ h3 {
 .clear {
     clear: both;
 }
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
 .noselect {
     -webkit-user-select: none;  
     -moz-user-select: none;  
@@ -509,6 +528,41 @@ figure.background img{
     padding-top: 5px;
     margin-left: 25px !important;
 }
+
+/* ANALYSE TEST */
+#testinfo {
+    background-color: azure;
+    padding: 10px;
+    border-radius: 10px;
+}
+#testinfo p.close {
+    margin-top: 23px;
+    margin-right: 20px;
+}
+.nomarginbottom {
+    margin-bottom: 0px !important;
+}
+#default img {
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
+}
+#default, #custom {
+    padding: 10px;
+}
+section > section {
+    margin-bottom: 10px;
+}
+.dl-horizontal dt {
+    text-align: left !important;
+}
+.dl-horizontal dd{
+    margin-left: 150px !important;
+}
+.borderright {
+    border-right: 1px solid #e2e2e2;
+}
+    
 
 
 /* Portrait tablet to landscape and desktop */

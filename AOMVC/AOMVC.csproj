@@ -247,6 +247,7 @@
     <Content Include="Content\phonetic\lucida_unicode_sans-webfont.ttf" />
     <Content Include="Content\phonetic\lucida_unicode_sans-webfont.woff" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="images\c3Q0LmpwZzc5Ng==.jpeg" />
     <Content Include="Scripts\alerts.js" />
     <Content Include="Scripts\createRoutine.js" />
     <Content Include="Scripts\fullscreen.js" />
@@ -569,6 +570,7 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Test\ToAnalyse.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\LocalDatetime.cshtml" />
+    <Content Include="Views\Test\Analyse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

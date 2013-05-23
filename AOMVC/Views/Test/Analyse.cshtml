@@ -1,0 +1,166 @@
+﻿@model LibAOModels.Test
+@section Styles{
+    @Styles.Render("~/Content/phonetic/css")
+}
+@{
+    ViewBag.Title = "Analyseren";
+}
+
+<h1>Analyseren</h1>
+<hr class="nomarginbottom" />
+
+<section id="testinfo">
+    <p class="close right noselect"><i class="icon-chevron-up"></i></p>
+    <h2>Informatie Over De Test</h2>
+    <section id="test">
+        <section class="span6">
+        <h3>Test</h3>
+            <dl class="dl-horizontal">
+                <dt>Module</dt>
+                <dd>@Model.Routine.Name</dd>
+                <dt>Techniek</dt>
+                <dd>@Model.Kind</dd>
+                <dt>Juist/Fout</dt>
+                <dd>@Model.Results.Where(m => m.Value == 1).Count()/@Model.Results.Where(m => m.Value == 0).Count() </dd>
+                <dt>Opmerking</dt>
+                <dd>@Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Comment))</dd>
+            </dl>
+        </section>
+        <section class="span5">
+            <h3>Info</h3>
+            <dl class="dl-horizontal">
+                <dt>Aangemaakt</dt>
+                <dd>@Html.DisplayFor(m => m.Createddate, "LocalDatetime")</dd>
+                <dt>Afgerond</dt>
+                <dd>@Html.DisplayFor(m => m.Finisheddate, "LocalDatetime")</dd>
+                <dt>Voor normering</dt>
+                <dd>@(Model.ForStatistics==1?"Ja":"Nee")</dd>
+            </dl>
+        </section>
+    </section>
+    <section id="info" class="clear">
+        <section id="childinfo" class="span6">
+            <h3>Kind</h3>
+            <dl class="dl-horizontal">
+                <dt>Naam</dt>
+                <dd>@Model.User.Firstname @Model.User.Surname</dd>
+                <dt>Email</dt>
+                <dd>@Model.User.Email</dd>
+                <dt>Geboortedatum</dt>
+                <dd>@Model.User.DateOfBirth</dd>
+                <dt>Ingeschreven door</dt>
+                <dd>@Model.User.AdminEnrolled.Firstname @Model.User.AdminEnrolled.Surname</dd>
+                <dt>Aantal testen</dt>
+                <dd>@Model.User.TestsTaken.Count()</dd>
+            </dl>
+        </section>
+        <section id="admininfo" class="span6">
+            <h3>Logopedist</h3>
+            <dl class="dl-horizontal">
+                <dt>Naam</dt>
+                <dd>@Model.Admin.Firstname @Model.Admin.Surname</dd>
+                <dt>Email</dt>
+                <dd>@Model.Admin.Email</dd>
+            </dl>
+        </section>
+    </section>
+    <section class="clear"></section>
+</section>
+<h4 class="text-center">Progress</h4>
+<section id="default">
+    <h2>naam</h2>
+    <section>
+        <section id="defaultspicture" class="span6">
+            <img src="~/images/c3Q0LmpwZzc5Ng==.jpeg" class="img-rounded" alt="afbeelding" />
+            <audio controls="controls" preload="auto" tabindex="0" class="nodisplay" id="fragment">
+                <source src="http://localhost:3096/sound/NzMud2F2NTEw.wav" type="audio/wav" />
+                Your browser does not support the audio tag.
+            </audio>
+        </section>
+        <section id="defaultsinfo" class="span5">
+            <dl class="dl-horizontal">
+                <dt>Aanvulzin</dt>
+                <dd>zin</dd>
+                <dt>Fonetisch</dt>
+                <dd>phon</dd>
+            </dl>
+        </section>
+    </section>
+    <section class="clear"></section>
+    <hr class="" />
+</section>
+<section id="custom">
+    <h2>Analyse Resultaat</h2>
+    <section>
+        <section id="" class="span6">
+            <audio controls="controls" preload="auto" tabindex="0">
+                <source src="http://localhost:3096/sound/NzMud2F2NTEw.wav" type="audio/wav" />
+                Your browser does not support the audio tag.
+            </audio>
+        </section>
+        <section id="" class="span6">
+            <dl class="dl-horizontal">
+                <dt>Fonetisch</dt>
+                <dd><input type="text" class="phonetic" /></dd>
+            </dl>
+        </section>
+    </section>
+    <section class="clear"></section>
+    <section>
+        <section id="" class="span6 borderright">
+            <h3>Fonologische Fouten</h3>
+            @foreach (LibAOModels.Error err in @ViewBag.errors)
+            {
+                <p>@err.Name</p>
+            }
+        </section>
+        <section id="" class="span6">
+            <h3>Visuele Fouten</h3>
+            @foreach (LibAOModels.Error err in @ViewBag.visual)
+            {
+                <p>@err.Name</p>
+            }
+        </section>
+    </section>
+    <section class="clear"></section>
+    <hr class="" />
+</section>
+
+
+
+
+@section Scripts{
+    <script>
+        //VISIBILITY INFORMATION TOGGLE
+        var _up = false;
+        var _playing = false;
+        $(".close").click(function () {
+            if (!_up) {
+                $("#test").slideUp('3000');
+                $("#info").slideUp('3000');
+                $(".close").find("i").attr("class","icon-chevron-down")
+                _up = true;
+            }
+            else {
+                $("#test").slideDown('3000');
+                $("#info").slideDown('3000');
+                $(".close").find("i").attr("class", "icon-chevron-up")
+                _up = false;
+            }
+        });
+        $("#defaultspicture img").click(function () {
+            if (!_playing) {
+                document.getElementById("fragment").play();
+                _playing = true;
+            } else {
+                document.getElementById("fragment").pause();
+                _playing = false;
+            }
+        });
+    </script>
+    @Scripts.Render("~/bundles/phonetic")
+    <script>
+        StartPhonetic();
+    </script>
+}
+

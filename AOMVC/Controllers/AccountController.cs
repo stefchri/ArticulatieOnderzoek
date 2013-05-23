@@ -141,13 +141,13 @@ namespace AOMVC.Controllers
             return RedirectToAction("Login", "Account", new { message = "logout" });
         }
 
-        //ACTION TO DISPLAY PARTIAL VIEW INFORMATION ABOUT HOW MANY TESTS TO FINISH AND TO ANALYSE
+        //ACTION TO DISPLAY PARTIAL VIEW INFORMATION ABOUT HOW MANY TESTS TO FINISH AND TO ANALYSE IN SIDEBAR
         [AOAuthorize]
         public ActionResult AdminInfo()
         {
             Admin admin = MVCExtensions.getCurrentAdmin();
-            int toAnalyse = admin.Tests.Where(t => !t.Analyseddate.HasValue).Where(t => t.Finisheddate.HasValue).Count();
-            int toFinish = admin.Tests.Where(t => !t.Finisheddate.HasValue).Count();
+            int toAnalyse = admin.Tests.Where(t => !t.Analyseddate.HasValue).Where(t => t.Finisheddate.HasValue).Where(t => !t.Deleteddate.HasValue).Count();
+            int toFinish = admin.Tests.Where(t => !t.Finisheddate.HasValue).Where(t => !t.Deleteddate.HasValue).Count();
             ViewBag.toAnalyse = toAnalyse;
             ViewBag.toFinish = toFinish;
             return PartialView();

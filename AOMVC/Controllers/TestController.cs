@@ -82,7 +82,12 @@ namespace AOMVC.Controllers
 
         public ActionResult Analyse(long id)
         {
-            return View();
+            Test test = Adapter.TestRepository.GetByID(id);
+            List<Error> errors = Adapter.ErrorRepository.GetAll().ToList();
+            ViewBag.errors = errors;
+            List<Error> visErrors = Adapter.ErrorRepository.GetAll().Where(m => m.ID == 21 || m.ID == 22).ToList();
+            ViewBag.visual = visErrors;
+            return View(test);
         }
 
 
