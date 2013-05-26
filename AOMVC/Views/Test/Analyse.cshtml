@@ -11,7 +11,7 @@
 
 <section id="testinfo">
     <p class="close right noselect"><i class="icon-chevron-up"></i></p>
-    <h2>Informatie Over De Test</h2>
+    <h2 class="noselect toggleInfo clickable">Informatie Over De Test</h2>
     <section id="test">
         <section class="span6">
         <h3>Test</h3>
@@ -66,23 +66,20 @@
     </section>
     <section class="clear"></section>
 </section>
-<h4 class="text-center">Progress</h4>
+<div class="text-center analyse-progress"><div class="inner-progress"></div><span>Progress</span></div>
 <section id="default">
-    <h2>naam</h2>
+    <h2>Afbeelding</h2>
     <section>
         <section id="defaultspicture" class="span6">
-            <img src="~/images/c3Q0LmpwZzc5Ng==.jpeg" class="img-rounded" alt="afbeelding" />
-            <audio controls="controls" preload="auto" tabindex="0" class="nodisplay" id="fragment">
-                <source src="http://localhost:3096/sound/NzMud2F2NTEw.wav" type="audio/wav" />
-                Your browser does not support the audio tag.
-            </audio>
         </section>
         <section id="defaultsinfo" class="span5">
             <dl class="dl-horizontal">
+                <dt>Naam</dt>
+                <dd id="name">naam</dd>
                 <dt>Aanvulzin</dt>
-                <dd>zin</dd>
+                <dd id="sentence">zin</dd>
                 <dt>Fonetisch</dt>
-                <dd>phon</dd>
+                <dd id="phonetic">phon</dd>
             </dl>
         </section>
     </section>
@@ -91,76 +88,49 @@
 </section>
 <section id="custom">
     <h2>Analyse Resultaat</h2>
-    <section>
-        <section id="" class="span6">
-            <audio controls="controls" preload="auto" tabindex="0">
-                <source src="http://localhost:3096/sound/NzMud2F2NTEw.wav" type="audio/wav" />
-                Your browser does not support the audio tag.
-            </audio>
-        </section>
-        <section id="" class="span6">
-            <dl class="dl-horizontal">
-                <dt>Fonetisch</dt>
-                <dd><input type="text" class="phonetic" /></dd>
-            </dl>
+    <section class="results">
+        <section class="result">
+            
         </section>
     </section>
     <section class="clear"></section>
-    <section>
-        <section id="" class="span6 borderright">
-            <h3>Fonologische Fouten</h3>
-            @foreach (LibAOModels.Error err in @ViewBag.errors)
-            {
-                <p>@err.Name</p>
-            }
-        </section>
-        <section id="" class="span6">
-            <h3>Visuele Fouten</h3>
-            @foreach (LibAOModels.Error err in @ViewBag.visual)
-            {
-                <p>@err.Name</p>
-            }
-        </section>
+    <section class="errors">
+        <div class="error" id="">
+            <section id="" class="span6 borderright">
+                <h3>Fonologische Fouten</h3>
+                
+                <select class="hearable">
+                @foreach (LibAOModels.Error err in @ViewBag.errors)
+                {
+                    <option value="@err.ID">@err.Name</option>
+                }
+                </select>
+            </section>
+            <section id="" class="span6">
+                <h3>Visuele Fouten</h3>
+                <select class="visible">
+                    <option value="0">Geen visuele fout</option>
+                @foreach (LibAOModels.Error err in @ViewBag.visual)
+                {
+                    <option value="@err.ID">@err.Name</option>
+                }
+                </select>
+            </section>
+        </div>
     </section>
     <section class="clear"></section>
     <hr class="" />
 </section>
-
+<button class="btn left" id="previous">Vorige afbeelding</button>
+<button class="btn right" id="next">Volgende afbeelding</button>
 
 
 
 @section Scripts{
     <script>
-        //VISIBILITY INFORMATION TOGGLE
-        var _up = false;
-        var _playing = false;
-        $(".close").click(function () {
-            if (!_up) {
-                $("#test").slideUp('3000');
-                $("#info").slideUp('3000');
-                $(".close").find("i").attr("class","icon-chevron-down")
-                _up = true;
-            }
-            else {
-                $("#test").slideDown('3000');
-                $("#info").slideDown('3000');
-                $(".close").find("i").attr("class", "icon-chevron-up")
-                _up = false;
-            }
-        });
-        $("#defaultspicture img").click(function () {
-            if (!_playing) {
-                document.getElementById("fragment").play();
-                _playing = true;
-            } else {
-                document.getElementById("fragment").pause();
-                _playing = false;
-            }
-        });
+        var _testid = @Model.ID;
     </script>
     @Scripts.Render("~/bundles/phonetic")
-    <script>
-        StartPhonetic();
-    </script>
+    @Scripts.Render("~/bundles/analyse")
 }
 

@@ -249,6 +249,7 @@
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="images\c3Q0LmpwZzc5Ng==.jpeg" />
     <Content Include="Scripts\alerts.js" />
+    <Content Include="Scripts\analyse.js" />
     <Content Include="Scripts\createRoutine.js" />
     <Content Include="Scripts\fullscreen.js" />
     <Content Include="Scripts\images.js" />

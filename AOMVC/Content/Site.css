@@ -16,6 +16,7 @@ body {
       background-size: 100%;
       font-family: Helvetica, Arial, sans-serif;
       height: 100%;
+      overflow-x: hidden;
 }
 html {
     height: 100%;
@@ -563,7 +564,51 @@ section > section {
 .borderright {
     border-right: 1px solid #e2e2e2;
 }
-    
+.analyse-progress {
+    border-radius: 10px;
+    height: 20px;
+    border: 1px solid #aaa;
+    margin-top: 30px;
+}
+.inner-progress {
+    border-radius: 10px;
+    background-color: #fda95a;
+    height: 20px;
+}
+.analyse-progress > span {
+    position: relative;
+    top: -20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.phonetic-copy {
+    font-size: 25px;
+}
+.hearable-select {
+    margin-top : 20px;
+}
+.error-text {
+    margin-left:15px;
+    font-size: 20px;
+    color: red;
+}
+.error-text-temp {
+    font-size: 20px;
+    color: red;
+}
+.error-entry {
+    margin-top:15px;
+}
+.error-entry-type {
+    min-width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.error-text {
+    min-width: 50px;
+    display: inline-block;
+    margin-right: 10px;
+}    
 
 
 /* Portrait tablet to landscape and desktop */

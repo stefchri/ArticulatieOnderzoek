@@ -98,11 +98,30 @@ namespace AOMVC.Controllers
         public ActionResult Analyse(long id)
         {
             Test test = Adapter.TestRepository.GetByID(id);
-            List<Error> errors = Adapter.ErrorRepository.GetAll().ToList();
+            List<Error> errors = Adapter.ErrorRepository.GetAll().Where(m => m.ID != 21 && m.ID != 22).ToList();
             ViewBag.errors = errors;
             List<Error> visErrors = Adapter.ErrorRepository.GetAll().Where(m => m.ID == 21 || m.ID == 22).ToList();
             ViewBag.visual = visErrors;
             return View(test);
+        }
+        
+        public JsonResult GetValuesForAnalysing(long id) 
+        {
+            Encoding unicode = Encoding.Unicode;
+            Test test = Adapter.TestRepository.GetByID(id);
+            ICollection<Result> results = test.Results.OrderBy(r => r.Order).ToList();
+            var res = from p in results select new {
+                Order = p.Order,
+                Value = p.Value,
+                Audio = p.AudioSource,
+                Name = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Name,
+                Image = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Url,
+                Sentence = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Sentence,
+                Phonetic = unicode.GetString(Convert.FromBase64String(p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Phonetic)),
+                ImageSound = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.SoundUrl,
+                Error = p.Errors.Count() != 0? p.Errors.Where(e => e.ID == 21 || e.ID == 22 || e == null).First().ID : 0 
+            };
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
         
         public ActionResult Test(long id)

@@ -52,11 +52,14 @@ namespace AOMVC
                         "~/Scripts/test.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/analyse").Include(
+                        "~/Scripts/analyse.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/Site.css"));
+                        "~/Content/Site.css"));
 
             bundles.Add(new StyleBundle("~/Content/phonetic/css").Include(
-                "~/Content/phonetic/phonetic.css"));
+                        "~/Content/phonetic/phonetic.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -73,20 +76,20 @@ namespace AOMVC
                         "~/Content/themes/base/jquery.ui.theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/lightness").Include(
-                   "~/Content/themes/ui-lightness/jquery-ui-1.10.2.custom.css"));
+                        "~/Content/themes/ui-lightness/jquery-ui-1.10.2.custom.css"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
-                "~/Content/bootstrap/css/bootstrap.css",
-                "~/Content/bootstrap/css/bootstrap-responsive.css"));
+                        "~/Content/bootstrap/css/bootstrap.css",
+                        "~/Content/bootstrap/css/bootstrap-responsive.css"));
 
 
             bundles.Add(new StyleBundle("~/Content/bootstrapnoresponsive").Include(
-                "~/Content/bootstrap/css/bootstrap.css"));
+                        "~/Content/bootstrap/css/bootstrap.css"));
 
             
 
             bundles.Add(new StyleBundle("~/Content/Test").Include(
-                "~/Content/Test.css"));
+                        "~/Content/Test.css"));
         }
     }
 }
