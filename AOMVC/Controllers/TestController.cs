@@ -44,6 +44,21 @@ namespace AOMVC.Controllers
             return View(routs);
         }
 
+        [HttpPost]
+        public ActionResult Create(int routine, int child, string kind, string stats)
+        {
+            Test test = new Test();
+            test.AdminID = MVCExtensions.getCurrentAdmin().ID;
+            test.Createddate = DateTime.UtcNow;
+            test.Kind = kind;
+            test.RoutineID = routine;
+            test.UserID = child;
+            test.ForStatistics = Convert.ToInt16(stats);
+            Adapter.TestRepository.Insert(test);
+            Adapter.Save();
+            return Content( test.ID.ToString() );
+        }
+
         public ActionResult ToFinish(int id)
         {
             return View();
@@ -89,22 +104,13 @@ namespace AOMVC.Controllers
             ViewBag.visual = visErrors;
             return View(test);
         }
-
-
-        public ActionResult Test(int routine, int child, string kind, string stats)
+        
+        public ActionResult Test(long id)
         {
-            ViewBag.Child = child;
-            ViewBag.Routine = routine;
-            Test test = new Test();
-            test.AdminID = MVCExtensions.getCurrentAdmin().ID;
-            test.Createddate = DateTime.UtcNow;
-            test.Kind = kind;
-            test.RoutineID = routine;
-            test.UserID = child;
-            test.ForStatistics = Convert.ToInt16(stats);
-            Adapter.TestRepository.Insert(test);
-            Adapter.Save();
-            ViewBag.testid = test.ID;
+            Test test = Adapter.TestRepository.GetByID(id);
+            ViewBag.Child = test.UserID;
+            ViewBag.Routine = test.RoutineID;
+            ViewBag.testid = id;
             return View();
         }
 

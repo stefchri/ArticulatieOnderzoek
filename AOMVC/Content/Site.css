@@ -439,6 +439,7 @@ figure.background img{
     display:block;
     margin-left: 10px;
     margin-top: 10px;
+    cursor: pointer;
 }
 
 /* Routines */

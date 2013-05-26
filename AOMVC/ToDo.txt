@@ -1,10 +1,6 @@
 todo:
 Test start -> check voor geen kinderen, routines -> niet mogelijk starten!
 
-test start -> geen knoppen en keyboard mogelijk maken
-
 Test geluid -> alleen header wav?
-
-checken inserts
 
 errors ook naar de afbeeldingen linken

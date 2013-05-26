@@ -49,6 +49,7 @@
 
 @section Scripts{
     <script>
+        var _root = "http://" + window.location.host.toString() + "/";
         $(".routines li").first().addClass("chosenRoutine");
         function makeActive(e) {
             $(".routines li").each(function (i, v) {
@@ -68,7 +69,31 @@
             var child = $(".children").find(".selectedChild").first().data("id");
             var kind = $('input[name=kind]:checked').val();
             var stat = $('input[name=stats]:checked').val();
-            window.location = "http://" + window.location.host + "/Test/Test?routine="+ rout +"&child=" + child +"&kind=" + kind + "&stats=" + stat;
+
+            var formData = new FormData();
+            formData.append("routine", rout);
+            formData.append("child", child);
+            formData.append("kind", kind);
+            formData.append("stats", stat);
+
+            //CREATE THE NEW REQUEST
+            var xhr = new XMLHttpRequest();
+
+            xhr.addEventListener("load", function (evt) {
+                if (evt.currentTarget.responseText != "") {
+                    window.location = _root + "Test/Test?id=" + evt.currentTarget.responseText;
+                }
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error attempting to upload the file.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The upload has been canceled by the user or the browser dropped the connection.");
+            }, false);
+
+
+            xhr.open("POST", _root + "Test/Create");
+            xhr.send(formData);
         }
     </script>
 }
