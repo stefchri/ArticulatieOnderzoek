@@ -2,5 +2,30 @@
     ViewBag.Title = "Home";
 }
 
-<h1>Welkom</h1>
+<h1>Welkom @ViewBag.Name</h1>
 <hr />
+<section class="home-table">
+    <section class="span6">
+        <h3><i class="icon-flag move"></i>Laatste onafgewerkte testen</h3>
+        @Html.Action("ToFinish","Home")
+    </section>
+    <section class="span6">
+        <h3><i class="icon-edit move"></i>Laatste te analyseren testen</h3>
+        @Html.Action("ToAnalyse","Home")
+    </section>
+</section>
+<section>
+    <section class="span12">
+        <h3><i class="icon-user move"></i>Laatst geteste kinderen</h3>
+        @Html.Action("RecentlyTestedChildren","Home")
+    </section>
+</section>
+@section Scripts{
+    <script>
+        var _root = "http://" + window.location.host.toString() + "/";
+
+        function stat() {
+            window.location = _root + "Statistics";
+        }
+    </script> 
+}

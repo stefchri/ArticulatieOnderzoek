@@ -1,16 +1,12 @@
 ﻿@model LibAOModels.Test
-@section Styles{
-    @Styles.Render("~/Content/phonetic/css")
-}
 @{
-    ViewBag.Title = "Analyseren";
+    ViewBag.Title = "Rapport";
 }
 
-<h1>Analyseren</h1>
+<h1>Rapport</h1>
 <hr class="nomarginbottom" />
 
 <section id="testinfo">
-    <p class="close right noselect"><i class="icon-chevron-up"></i></p>
     <h2 class="noselect toggleInfo clickable">Informatie Over De Test</h2>
     <section id="test">
         <section class="span6">
@@ -33,6 +29,8 @@
                 <dd>@Html.DisplayFor(m => m.Createddate, "LocalDatetime")</dd>
                 <dt>Afgerond</dt>
                 <dd>@Html.DisplayFor(m => m.Finisheddate, "LocalDatetime")</dd>
+                <dt>Geanalyseerd</dt>
+                <dd>@Html.DisplayFor(m => m.Analyseddate, "LocalDatetime")</dd>
                 <dt>Voor normering</dt>
                 <dd>@(Model.ForStatistics==1?"Ja":"Nee")</dd>
             </dl>
@@ -66,73 +64,65 @@
     </section>
     <section class="clear"></section>
 </section>
-<div class="text-center analyse-progress"><div class="inner-progress"></div><span>Progress</span></div>
-<section id="default">
-    <h2>Afbeelding</h2>
-    <section>
-        <section id="defaultspicture" class="span6">
-        </section>
-        <section id="defaultsinfo" class="span5">
-            <dl class="dl-horizontal">
-                <dt>Naam</dt>
-                <dd id="name">naam</dd>
-                <dt>Aanvulzin</dt>
-                <dd id="sentence">zin</dd>
-                <dt>Fonetisch</dt>
-                <dd id="phonetic">phon</dd>
-            </dl>
-        </section>
-    </section>
-    <section class="clear"></section>
-    <hr class="" />
-</section>
-<section id="custom">
-    <h2>Analyse Resultaat</h2>
-    <section class="results">
-        <section class="result">
-            
-        </section>
-    </section>
-    <section class="clear"></section>
-    <section class="errors">
-        <div class="error" id="">
-            <section id="" class="span6 borderright">
-                <h3>Fonologische Fouten</h3>
-                
-                <select class="hearable">
-                @foreach (LibAOModels.Error err in @ViewBag.errors)
+<section>
+    <section id="phoneticinfo" class="span6">
+        <h3>Fonetisch</h3>
+        <table class="table">
+            @for (int i = 0; i < ViewBag.Count.Count; i++)
+            {
+                if (@ViewBag.Count[i] != 0)
                 {
-                    <option value="@err.ID">@err.Name</option>
+                    <tr>
+                        <td>@ViewBag.Names[i]</td>
+                        <td>@ViewBag.Count[i]</td>
+                    </tr>
                 }
-                </select>
-            </section>
-            <section id="" class="span6">
-                <h3>Visuele Fouten</h3>
-                <select class="visible">
-                    <option value="0">Geen visuele fout</option>
-                @foreach (LibAOModels.Error err in @ViewBag.visual)
-                {
-                    <option value="@err.ID">@err.Name</option>
-                }
-                </select>
-            </section>
-        </div>
+            }
+        </table>
     </section>
-    <section class="clear"></section>
-    <hr class="" />
+    <section id="score" class="span6">
+        <h3>Opmerkingen</h3>
+        @Html.TextAreaFor(m => m.Comment, new { @id = "remarks"})
+    </section>
 </section>
-<button class="btn left" id="previous">Vorige afbeelding</button>
-<button class="btn left" id="next">Volgende afbeelding</button>
-<button class="btn right" id="final">Afronden</button>
-<button class="btn right" id="save">Opslagen</button>
-
-
-
+<button class="btn right" onclick="send()">Afronden</button>
 @section Scripts{
+    @Scripts.Render("~/bundles/editor")
     <script>
-        var _testid = @Model.ID;
-    </script>
-    @Scripts.Render("~/bundles/phonetic")
-    @Scripts.Render("~/bundles/analyse")
-}
+        var _root = "http://" + window.location.host.toString() + "/";
 
+        $(document).ready(function () {
+            tinymce.init({
+                selector: "textarea#remarks",
+                theme: "advanced",
+                width: 400,
+                height: 300,
+                //content_css: "css/content.css",
+                toolbar: "undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | hr code",
+            });
+            
+        })
+        function send() {
+            var cont = tinyMCE.activeEditor.getContent();
+            var fd = new FormData();
+            fd.append("id", @ViewBag.Test);
+            fd.append("remark", cont);
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (evt) {
+                if(evt.currentTarget.responseText == "200")
+                {
+                    window.location = _root + "Home/Index"
+                }
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error getting the values of the test.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The retrieval has been canceled by the user or the browser dropped the connection.");
+            }, false);
+            xhr.open("POST", _root + "Test/SaveReport");
+            xhr.send(fd);
+        }
+
+    </script>
+}

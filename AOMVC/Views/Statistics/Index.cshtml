@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "Statistieken";
+}
+
+<h1>Statistieken</h1>
+<hr />
+
+<section id="graph">
+
+</section>
+<section id="table" class="nodisplay"></section>
+@section Scripts{
+    @Scripts.Render("~/bundles/chart")
+    <script>
+        var _root = "http://" + window.location.host.toString() + "/";
+        $(document).ready(function () {
+            var fd = new FormData();
+                       
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (evt) {
+                console.log(evt.currentTarget.responseText);
+                makeGraph(JSON.parse(evt.currentTarget.responseText));
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error getting the values of the test.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The retrieval has been canceled by the user or the browser dropped the connection.");
+            }, false);
+            xhr.open("POST", _root + "Statistics/GetStats");
+            xhr.send(fd);
+
+        })
+
+        function makeGraph(json) {
+            var x = [];
+            var y = [];
+            console.log(json.array);
+            var array = json.array;
+            for (var i = 0; i < array.length; i++) {
+                x.push(array[i].Errors);
+                y.push(array[i].Count);
+            }
+
+
+            $(function () {
+                chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'graph',
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Fouten gemaakt',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Aantal fouten gemaakt tijdens de testen',
+                        x: -20
+                    },
+                    xAxis: {
+                        min: 0,
+                        categories: x
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Aantal keer foutentotaal behaald'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.x + ' fouten: ' + this.y + ' keer';
+                        }
+                    },
+                    series: [{name: "Aantal fouten", data:y}]
+                });
+            });
+        }
+    </script>    
+}

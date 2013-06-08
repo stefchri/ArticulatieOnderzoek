@@ -4,6 +4,28 @@ var _playing = false;
 var _active = 1;
 var _results = [];
 var _makingError = false;
+var _errorList = ["",
+                    "Weglating finale consonant",
+                    "Weglating initiale consonant",
+                    "Clusterreductie",
+                    "Epenthesis",
+                    "Weglating onbeklemtoonde syllabe",
+                    "Coalescentie",
+                    "Fronting",
+                    "Backing",
+                    "Stopping",
+                    "Gliding",
+                    "Denasalisatie",
+                    "Verstemlozing",
+                    "Progressieve assimilatie",
+                    "Regressieve assimilatie",
+                    "Contactassimilatie",
+                    "Afstandassimilatie",
+                    "Reduplicatie door substitutie",
+                    "Reduplicatie door additie",
+                    "Metathisis",
+                    "Idiosyncratische en ongewone processen"
+];
 
 (function () {
     var App = {
@@ -33,13 +55,22 @@ var _makingError = false;
             $("#previous").click(function () {
                 if (_active != 1) {
                     App.showAnalyse(_active - 1);
+                    StartPhonetic();
                 }
             });
             $("#next").click(function () {
                 if (_active != _results.length) {
                     App.showAnalyse(_active + 1);
+                    StartPhonetic();
                 }
             });
+            $("#save").click(function () {
+                App.saveAnalysis();
+            });
+            $("#final").click(function () {
+                App.finalise();
+            });
+
         },
         bindResultEvents: function () {
             StartPhonetic();
@@ -52,13 +83,10 @@ var _makingError = false;
                     _playing = false;
                 }
             });
-            $(".result .phonetic").keyup(function (e) { App.handlePhoneticInput(e) });
+            //$(".result .phonetic").keyup(function (e) { App.handlePhoneticInput(e) });
             $(".addError").click(function (e) {
                 if ($(e.currentTarget).parent().find(".phonetic-copy").html() != "" && !_makingError) {
-                    var html = App.getSelectionHtml();
-                    if (html != "") {
-                        App.addError(html);
-                    }
+                    App.addError();
                 }
                 e.preventDefault();
             })
@@ -67,8 +95,7 @@ var _makingError = false;
             $(".errorAccept").click(function (e) {
                 var value = $(".errors .error[data-id=" + _active + "] .hearable").val();
                 var text = $(".errors .error[data-id=" + _active + "] .hearable option:selected").text();
-                var selected = $(".errors .error[data-id=" + _active + "] .error-text-temp").html();
-                var html = "<div class='error-entry'><span class='error-entry-type' data-value='" + value + "'>" + text + "</span><span class='error-text'>" + selected + '</span><a class="btn errorRemove" href="#errors" title="Fout verwijderen"><i class="icon-remove-circle"></i></a></div>';
+                var html = "<div class='error-entry'><span class='error-entry-type' data-value='" + value + "'>" + text + '</span><a class="btn errorRemove" href="#errors" title="Fout verwijderen"><i class="icon-remove-circle"></i></a></div>';
 
                 $(".errors .error[data-id=" + _active + "] .error-entries-permanent").append(html);
 
@@ -82,7 +109,6 @@ var _makingError = false;
                     if (output) {
                         $(e.currentTarget).parent().remove();
                     }
-                    
                 });
             });
             $(".errorDeny").click(function (e) {
@@ -126,26 +152,40 @@ var _makingError = false;
                             + '</section>'
                             + '<section id="" class="span6">'
                                 + '<label class="control-label">Fonetisch</label>'
-                                + '<input type="text" class="phonetic left" />'
+                                + '<input type="text" class="phonetic left" value="'+ _results[i].Phonetics +'" />'
                             + '</section>'
                         + '</section>';
                 output1 += html;
 
                 var v = "";
-                if (_results[i].Error == 0) {
-                    v = "Geen visuele fout.";
-                } else if (_results[i].Error == 21) {
-                    v = "Addentale fout";
-                } else if (_results[i].Error == 22) {
-                    v = "Interdentale fout";
+                for (var j = 0; j < _results[i].Errors.length; j++) {
+                    if (_results[i].Errors[j].Id == 21) {
+                        v = "Addentale fout";
+                    } else if (_results[i].Errors[j].Id == 22) {
+                        v = "Interdentale fout";
+                    }
                 }
-
+                
+                if (v == "") {
+                    v = "Geen visuele fout.";
+                }
+                var entries = "";
+                for (var j = 0; j < _results[i].Errors.length; j++) {
+                    if (_results[i].Errors[j].Id != 21 && _results[i].Errors[j].Id != 22) {
+                        entries += '<div class="error-entry">' +
+                                        '<span class="error-entry-type" data-value="' + _results[i].Errors[j].Id + '">' + _results[i].Errors[j].Name + '</span>' +
+                                        '<a class="btn errorRemove" href="#errors" title="Fout verwijderen"><i class="icon-remove-circle"></i></a>' +
+                                    '</div>';
+                    }
+                }
                 var html2 = '<section class="error" data-id="'+ b +'">'+
                                 '<section id="" class="span6 borderright">'+
                                     '<h3>Fonologische Fouten</h3>' +
                                     '<p class="phonetic-copy"> </p>'+
-                                    '<a class="btn addError" href="#errors"><i class="icon-plus"></i> Fout toevoegen aan geselecteerd lettergreep</a>' +
-                                    '<div class="error-entries-permanent"></div>' +
+                                    '<a class="btn addError" href="#errors"><i class="icon-plus"></i> Fout toevoegen</a>' +
+                                    '<div class="error-entries-permanent">' +
+                                        entries +
+                                    '</div>' +
                                     '<div class="hearable-select">'+
                                         '<select class="hearable nodisplay">'+
                                             hearable +
@@ -158,12 +198,21 @@ var _makingError = false;
                                     v +
                                 '</section>'+
                             '</section>';
+                
+
+                
                 output2 += html2;
             }
             $(".results").html(output1);
             $(".errors").html(output2);
             
             App.showAnalyse(1);
+            $(".errors .errorRemove").click(function (e) {
+                var output = window.confirm("Bent u zeker dat u deze fout wilt verwijderen?");
+                if (output) {
+                    $(e.currentTarget).parent().remove();
+                }
+            });
         },
         showAnalyse: function (number) {
             $(".result").hide();
@@ -207,9 +256,9 @@ var _makingError = false;
             }
             return html;
         },
-        addError: function (html) {
+        addError: function () {
             $(".errors .error[data-id=" + _active + "] .hearable").show();
-            $(".errors .error[data-id=" + _active + "] .error-entries").append("<div class='error-entry-temp error-active'><span class='error-text-temp'>" + html + '</span><div class="btn-toolbar">'+
+            $(".errors .error[data-id=" + _active + "] .error-entries").append("<div class='error-entry-temp error-active'><div class='btn-toolbar'>"+
                                                                                                                                 '<div class="btn-group">'+
                                                                                                                                     '<a class="btn errorAccept" href="#errors" title="Fout accepteren"><i class="icon-ok-circle"></i></a>'+
                                                                                                                                     '<a class="btn errorDeny" href="#errors" title="Fout verwijderen"><i class="icon-remove-circle"></i></a>'+
@@ -217,6 +266,55 @@ var _makingError = false;
                                                                                                                             '</div></div>');
             App.bindErrorEvents();
             _makingError = true;
+        },
+
+        saveAnalysis: function() {
+            var fd = new FormData();
+            var data = {};
+            var errors = [];
+            var phon = [];
+
+            $(".error").each(function (i, v) {
+                var img = [];
+
+                $(v).find("section .error-entries-permanent .error-entry").each(function (ind, val) {
+                    var type = $(val).find(".error-entry-type").first().data("value");
+                    var error = {};
+                    error.type = type;
+                    img.push(error);
+                });
+
+                errors.push(img);
+                var dataid = $(v).data("id");
+                var phoneticResult = $(v).parent().parent().find(".result[data-id=" + dataid + "]").first().find('.phonetic').val();
+                var phonObject = {};
+                phonObject.phonetic = phoneticResult;
+                phon.push(phonObject);
+            });
+            var s = JSON.stringify(errors);
+            var p = JSON.stringify(phon);
+            fd.append("errors", s);
+            fd.append("test", _testid);
+            fd.append("phonetic", p);
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (evt) {
+                console.log(evt);
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error saving the values of the analysis.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The save has been canceled by the user or the browser dropped the connection.");
+            }, false);
+            xhr.open("POST", _root + "Test/SaveAnalysis");
+            xhr.send(fd);
+        },
+        finalise: function () {
+            App.saveAnalysis();
+            var test = window.confirm("Bent u zeker dat alles coorect ingevuld is de analyse afgerond is?");
+            if (test) {
+                window.location = _root + "Test/Report?id=" + _testid;
+            }
         }
     }
     App.init();

@@ -35,7 +35,8 @@ namespace AOMVC.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(MVCExtensions.getCurrentAdmin().ID)).ToList();
+            return View(tests);
         }
 
         public ActionResult Create()
@@ -104,6 +105,45 @@ namespace AOMVC.Controllers
             ViewBag.visual = visErrors;
             return View(test);
         }
+
+        public ActionResult Report(long id)
+        {
+            Test test = Adapter.TestRepository.GetByID(id);
+            test.Analyseddate = DateTime.UtcNow;
+            Adapter.TestRepository.Update(test);
+            Adapter.Save();
+
+            List<String> names = new List<string>();
+            List<Int32> count = new List<Int32>(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+
+            var errs = Adapter.ErrorRepository.GetAll().ToList();
+            foreach (var item in errs)
+	        {
+		        names.Add(item.Name);
+	        }
+            var results = Adapter.ResultRepository.GetAll().Where(r => r.TestID.Equals(id)).ToList();
+            foreach (var item in results)
+            {
+                foreach (var err in item.Errors)
+	            {
+                    count[Convert.ToInt32(err.ID - 1)] += 1;
+	            }
+            }
+            ViewBag.Test = id;
+            ViewBag.Count = count;
+            ViewBag.Names = names;
+            return View(test);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult SaveReport(long id, string remark) 
+        {
+            Test test = Adapter.TestRepository.GetByID(id);
+            test.Comment = remark;
+            Adapter.TestRepository.Update(test);
+            Adapter.Save();
+            return Content("200");
+        }
         
         public JsonResult GetValuesForAnalysing(long id) 
         {
@@ -118,12 +158,57 @@ namespace AOMVC.Controllers
                 Image = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Url,
                 Sentence = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Sentence,
                 Phonetic = unicode.GetString(Convert.FromBase64String(p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.Phonetic)),
+                Phonetics = p.Phonetic == null?"":unicode.GetString(Convert.FromBase64String(p.Phonetic)),
                 ImageSound = p.Test.Routine.ImagesInRoutine.Where(l => l.ImageOrder.Equals(p.Order)).First().Image.SoundUrl,
-                Error = p.Errors.Count() != 0? p.Errors.Where(e => e.ID == 21 || e.ID == 22 || e == null).First().ID : 0 
+                Errors = (from h in p.Errors select new {
+                        Id = h.ID,
+                        Name = h.Name
+                })
             };
             return Json(res, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public ActionResult SaveAnalysis(String errors, long test, string phonetic)
+        {
+            JArray images = JArray.Parse(errors);
+            var i = 1;
+            foreach (var image in images)
+            {
+                //DELETE ALL THE ERRORS WHERE NOT VISUAL
+                Result res = Adapter.ResultRepository.GetAll().Where(r => r.Order.Equals(i) && r.TestID.Equals(test)).First();
+                if (res.Errors.Count() > 0)
+                {
+                    res.Errors.ToList().Where(er => er.ID != 21 && er.ID != 22).ToList().ForEach(e => res.Errors.Remove(e));
+                    Adapter.Save();
+                }
+
+                foreach (var error in image)
+                {
+                    var type = error.SelectToken("type");
+                    var tp = Convert.ToInt64(type.ToString());
+
+                    Error findError = Adapter.ErrorRepository.GetAll().Where(r => r.ID.Equals(tp)).First();
+                    res.Errors.Add(findError);
+                    Adapter.Save();
+                }
+                i++;
+            }
+
+            JArray phonetics = JArray.Parse(phonetic);
+            var j = 1;
+            foreach (var phon in phonetics)
+            {
+                Result res = Adapter.ResultRepository.GetAll().Where(r => r.Order.Equals(j) && r.TestID.Equals(test)).First();
+                Encoding unicode = Encoding.Unicode;
+                byte[] unicodeBytes = unicode.GetBytes(phon.SelectToken("phonetic").ToString());
+                string phonEncoded = Convert.ToBase64String(unicodeBytes);
+                res.Phonetic = phonEncoded;
+                j++;
+            }
+            Adapter.Save();
+            return Content("success");
+        }
+
         public ActionResult Test(long id)
         {
             Test test = Adapter.TestRepository.GetByID(id);
@@ -161,6 +246,10 @@ namespace AOMVC.Controllers
         public ActionResult UploadSound(string filename)
         {
             Test t = Adapter.TestRepository.GetByID(Convert.ToInt64(filename));
+            t.Modifieddate = DateTime.UtcNow;
+            Adapter.TestRepository.Update(t);
+            Adapter.Save();
+
             //CREATE DIRECTORIES
             string dir = Server.MapPath("~/results/");
             if (!System.IO.Directory.Exists(dir + t.ID.ToString()))
@@ -294,6 +383,13 @@ namespace AOMVC.Controllers
             
             Adapter.Save();
             return Content("success");
+        }
+
+        public ActionResult HomeToAnalyse()
+        {
+            int id = MVCExtensions.getCurrentAdmin().ID;
+            List<Test> tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(id) && t.Analyseddate == null && t.Finisheddate != null).OrderBy(t => t.Createddate).Take(5).ToList();
+            return PartialView(tests);
         }
     }
 }

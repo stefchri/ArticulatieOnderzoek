@@ -172,6 +172,7 @@ function ShowHint(el, list) {
 
     tooltip = document.createElement("ul");
     tooltip.setAttribute("id", "tooltip");
+    tooltip.setAttribute("data-array", "tooltip");
 
     for (var i = 0; i < list.length; i++) {
         var lis = document.createElement("li");

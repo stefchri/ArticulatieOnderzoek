@@ -1,0 +1,41 @@
+﻿@model List<LibAOModels.Test>
+
+@section Styles{
+    @Styles.Render("~/Content/themes/lightness")
+}
+
+<h1>Top 5 te analyseren testen</h1>
+<hr />
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            Afgemaakt
+        </th>
+        <th>
+            Kind
+        </th>
+        <th>
+            Routine
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Finisheddate.Value, "LocalDatetime")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Firstname) @Html.DisplayFor(modelItem => item.User.Surname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Routine.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Analyseren", "Analyse", "Test", new { id = item.ID }, new  { @title="Analyseren"})
+        </td>
+    </tr>
+}
+</table>

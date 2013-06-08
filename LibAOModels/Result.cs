@@ -13,7 +13,7 @@ namespace LibAOModels
         [Required]
         public Int32 Order { get; set; }
         public string AudioSource { get; set; }
-        public Int32 Phonetic { get; set; }
+        public string Phonetic { get; set; }
         public Int16 Value { get; set; }
         public Int64 TestID { get; set; }
 

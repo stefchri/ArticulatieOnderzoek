@@ -138,6 +138,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\RoutineController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="ExtensionMethods\ExtensionMethods.cs" />
     <Compile Include="Global.asax.cs">
@@ -252,6 +253,7 @@
     <Content Include="Scripts\analyse.js" />
     <Content Include="Scripts\createRoutine.js" />
     <Content Include="Scripts\fullscreen.js" />
+    <Content Include="Scripts\highcharts.src.js" />
     <Content Include="Scripts\images.js" />
     <Content Include="Scripts\editImage.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
@@ -572,6 +574,13 @@
     <Content Include="Views\Test\ToAnalyse.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\LocalDatetime.cshtml" />
     <Content Include="Views\Test\Analyse.cshtml" />
+    <Content Include="Views\Test\HomeToAnalyse.cshtml" />
+    <Content Include="Views\Statistics\Index.cshtml" />
+    <Content Include="Views\Test\Report.cshtml" />
+    <Content Include="Views\Home\ToAnalyse.cshtml" />
+    <Content Include="Views\Home\ToFinish.cshtml" />
+    <Content Include="Views\Home\RecentlyTestedChildren.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ShortDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

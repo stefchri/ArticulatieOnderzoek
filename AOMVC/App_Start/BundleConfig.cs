@@ -52,6 +52,12 @@ namespace AOMVC
                         "~/Scripts/test.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/editor").Include(
+                        "~/Scripts/tinymce/tiny_mce.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/chart").Include(
+                        "~/Scripts/highcharts.src.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/analyse").Include(
                         "~/Scripts/analyse.js"));
 

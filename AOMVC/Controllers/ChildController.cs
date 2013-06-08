@@ -107,6 +107,16 @@ namespace AOMVC.Controllers
             return View("Index", results);
         }
 
-        
+        [ValidateInput(false)]
+        public ActionResult SaveReport(long id, string remark)
+        {
+            User user = Adapter.UserRepository.GetByID(id);
+            user.Report = remark;
+            Adapter.UserRepository.Update(user);
+            Adapter.Save();
+            return Content("200");
+        }
+
+
     }
 }

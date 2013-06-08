@@ -290,6 +290,14 @@ h1 .query {
     background-image: linear-gradient(to top, #FFFFFF, #E6E6E6);
 }
 
+.move {
+    margin-right: 20px;
+    margin-top: 10px;
+}
+.home-table {
+    min-height: 300px;
+    margin-bottom: 20px;
+}
 /* list images */
 #images {
     padding: 20px;
@@ -600,7 +608,7 @@ section > section {
     margin-top:15px;
 }
 .error-entry-type {
-    min-width: 150px;
+    min-width: 260px;
     display: inline-block;
     margin-right: 10px;
 }
@@ -610,6 +618,11 @@ section > section {
     margin-right: 10px;
 }    
 
+
+/* Statistics */
+#graph {
+    margin-top: 50px;
+}
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {

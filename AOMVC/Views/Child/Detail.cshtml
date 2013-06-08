@@ -10,7 +10,7 @@
     <p>Email: @Model.Email</p>
     <p>Geslacht: @(Model.Gender == "m" ? "man" : "vrouw")</p>
     <p>Aantal keren getest: @Model.TestsTaken.Count()</p>
-    <p>Geboren op: @Model.DateOfBirth</p>
+    <p>Geboren op: @Html.DisplayFor(model => Model.DateOfBirth.Date,"ShortDate")</p>
     @if (@Model.Modifieddate != DateTime.MinValue)
     {
         <p>Profiel laatst aangepast op: @Model.Modifieddate</p>
@@ -20,32 +20,55 @@
     {
         <p>Profiel verwijderd op: @Model.Deleteddate</p>
     }
-    <h3>Resultaten</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>anamnesis</th>
-                <th>gehoor</th>
-                <th>spraak</th>
-                <th>taal</th>
-                <th>andere</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="text-align:center">
-                <td>@Model.Anamnesis</td>
-                <td>@Model.Hearing</td>
-                <td>@Model.Speech</td>
-                <td>@Model.Language</td>
-                <td>@Model.Other</td>
-            </tr>
-        </tbody>
-    </table>
-    @Model.Report
-    <p>Ingeschreven op <strong>@Model.Createddate.Date</strong> door logopedist <strong>@Model.AdminEnrolled.Firstname @Model.AdminEnrolled.Surname</strong></p>
+    @Html.TextAreaFor(m => m.Report, new {@id="report"})
+    
+    <p>Ingeschreven op <strong>@Html.DisplayFor(model => Model.Createddate.Date,"ShortDate")</strong> door logopedist <strong>@Model.AdminEnrolled.Firstname @Model.AdminEnrolled.Surname</strong></p>
     <hr />
     <div class="actionlink">
+        <button class="btn" onclick="save(@Model.ID)" title="Opslagen">Opslagen</button>
         <button class="btn" onclick="window.location='@Url.Action("Appointment", "Contact", new { id = Model.ID})'" title="Afspraak maken">Maak een afspraak</button>
+        <button class="btn" onclick="window.location='@Url.Action("Edit", "Child", new { id = Model.ID})'" title="Gegevens aanpassen">Aanpassen</button>
         <button class="btn" onclick="window.location='@Url.Action("Index", "Child")'" title="Terug naar lijst">Terug naar lijst</button>
     </div>
 </section>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/editor")
+    <script>
+        var _root = "http://" + window.location.host.toString() + "/";
+
+        $(document).ready(function () {
+            tinymce.init({
+                selector: "textarea#report",
+                theme: "advanced",
+                width: 400,
+                height: 300,
+                //content_css: "css/content.css",
+                toolbar: "undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | hr code",
+            });
+            
+        })
+        function save(id) {
+            var cont = tinyMCE.activeEditor.getContent();
+            var fd = new FormData();
+            fd.append("id", id);
+            fd.append("remark", cont);
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (evt) {
+                if(evt.currentTarget.responseText == "200")
+                {
+                    window.location = _root + "Home/Index"
+                }
+            }, false);
+            xhr.addEventListener("error", function (evt) {
+                console.log("There was an error getting the values of the test.");
+            }, false);
+            xhr.addEventListener("abort", function (evt) {
+                console.log("The retrieval has been canceled by the user or the browser dropped the connection.");
+            }, false);
+            xhr.open("POST", _root + "Child/SaveReport");
+            xhr.send(fd);
+        }
+
+        </script>
+}
