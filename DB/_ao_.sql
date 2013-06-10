@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Genereertijd: 10 jun 2013 om 19:33
+-- Genereertijd: 10 jun 2013 om 20:45
 -- Serverversie: 5.5.27
 -- PHP-versie: 5.4.7
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `image_modifieddate` datetime DEFAULT NULL,
   PRIMARY KEY (`image_id`),
   KEY `fk_images_admins1_idx` (`image_admin`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=71 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `images`
@@ -179,7 +179,8 @@ INSERT INTO `images` (`image_id`, `image_name`, `image_url`, `image_phonetic`, `
 (66, 'Valt', 'dmFsdC5naWYxNQ==.gif', 'dgBBAGwAdAA=', 'Oei! De bal ...', 'dmFsdC53YXY5MjA=.wav', 1, '2013-06-10 17:07:20', '0001-01-01 00:00:00'),
 (67, 'Plakken', 'cGxha2tlbi5naWY2.gif', 'cABsAEEAawC0AG4A', 'Ik laat deze foto aan de muur ...', 'cGxha2tlbi53YXY5OTE=.wav', 1, '2013-06-10 17:07:20', '2013-06-10 17:23:28'),
 (68, 'Likt', 'bGlrLmdpZjg1MQ==.gif', 'bABJAGsAdAA=', 'Wat doet dit hondje met zijn tong? Het ...', 'bGlrdC53YXY2NDA=.wav', 1, '2013-06-10 17:07:21', '0001-01-01 00:00:00'),
-(69, 'Smurf', 'U211cmYyLnBuZzEzOQ==.png', 'cwBtAPgAcgBmAA==', 'Blauw met een witte muts, dat is een ...', 'c211cmYud2F2NzEy.wav', 1, '2013-06-10 17:10:30', '0001-01-01 00:00:00');
+(69, 'Smurf', 'U211cmYyLnBuZzEzOQ==.png', 'cwBtAPgAcgBmAA==', 'Blauw met een witte muts, dat is een ...', 'c211cmYud2F2NzEy.wav', 1, '2013-06-10 17:10:30', '0001-01-01 00:00:00'),
+(70, 'Kabouter', 'a2Fib3V0ZXIucG5nNDA=.png', 'awBBAGIAQQB1AHQAtAByAA==', 'In de paddenstoel woont een ...', 'a2Fib3V0ZXIud2F2NzQ0.wav', 1, '2013-06-10 18:45:07', '0001-01-01 00:00:00');
 
 -- --------------------------------------------------------
 
