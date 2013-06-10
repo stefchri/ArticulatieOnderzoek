@@ -70,12 +70,9 @@
 						'callback_stopped_recording': function(){},
 						'callback_error_recording' : function(){},
 						'callback_activityTime': function(time){},
-						'callback_activityLevel' : function(level){}
-						
-						
-						
-		
-		
+						'callback_activityLevel': function (level) { }
+
+								
 						};
 	
 	
@@ -128,17 +125,13 @@
 							createParam(htmlObj, "allowscriptaccess", "always");
 							createParam(htmlObj, "bgcolor", settings['bgcolor']);
 							createParam(htmlObj, "wmode", settings['wmode'] );
-							
-							
-							
-							
 						}
 
 
 						var divObj = document.createElement("div");
 						
 						divObj.setAttribute("id", settings['recorderlayout_id']);
-						divObj.setAttribute("style", "position:absolute;top:"+ settings['rec_top'] +";left:"+ settings['rec_left'] +";z-index:-1");
+						divObj.setAttribute("style", "position:absolute;top:"+ settings['rec_top'] +";left:"+ settings['rec_left'] +";z-index:500;");
 						
 						divObj.appendChild(htmlObj);
 						
@@ -157,7 +150,7 @@
 	//function call to start a recording
 	$.jRecorder.record = function(max_time){
 	    try {
-	        $('#' + jRecorderSettings['recorderlayout_id']).css('z-index', 1000);
+	        $('#' + jRecorderSettings['recorderlayout_id']).css('z-index', 9999);
 	        getFlashMovie(jRecorderSettings['recorder_name']).jStartRecording(max_time);
 	    } catch (e) {
 	        var r = confirm("Geen microfoon gevonden, klik OK om de pagina te herladen.");
@@ -191,12 +184,38 @@
 
 	    getFlashMovie(jRecorderSettings['recorder_name']).jResumeRecording();
 	}
+	$.jRecorder.continue = function () {
+
+	    getFlashMovie(jRecorderSettings['recorder_name']).jContinueRecording();
+	}
+
+	$.jRecorder.onsample_data = function () {
+
+	    jRecorderSettings['sampledata']();
+	}
+
+	$.jRecorder.callback_test = function () {
+
+	    jRecorderSettings['callback_test']();
+	}
+
+	$.jRecorder.callback_next_recording = function () {
+
+	    jRecorderSettings['callback_next_recording']();
+	}
 
 	$.jRecorder.callback_started_recording = function(){
 		
 	
 		jRecorderSettings['callback_started_recording']();
 		
+	}
+
+	$.jRecorder.callback_muted = function () {
+
+
+	    jRecorderSettings['callback_muted']();
+
 	}
 	
 	
@@ -229,10 +248,10 @@
 		
 	}
 	
-	$.jRecorder.callback_activityTime = function(time){
+	$.jRecorder.callback_activityTime = function (time) {
 		
 		//put back flash while recording
-		$(  '#' + jRecorderSettings['recorderlayout_id'] ).css('z-index', -1);
+		$(  '#' + jRecorderSettings['recorderlayout_id'] ).css('z-index', 9999);
 		
 		jRecorderSettings['callback_activityTime'](time);
 		

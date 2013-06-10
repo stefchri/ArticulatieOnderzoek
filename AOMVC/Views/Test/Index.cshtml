@@ -116,6 +116,7 @@
     </table>
 
 <button class="btn left" onclick="analyse()">Te analyseren</button>
+<button class="btn left" onclick="finish()">Af te maken</button>
 @section Scripts{
    @Scripts.Render("~/bundles/jqueryui")
    @Scripts.Render("~/bundles/alert")
@@ -123,19 +124,23 @@
     var _root = "http://" + window.location.host.toString() + "/";
 
     function continueTest(id) {
-        window.location = _root + "Test/ContinueTest/?id=" + id
+        window.location = _root + "Test/Test/?id=" + id + "&continue=1";
     }
 
     function analyseIt(id) {
-        window.location = _root + "Test/Analyse/?id=" + id
+        window.location = _root + "Test/Analyse/?id=" + id;
     }
 
     function rapport(id) {
-        window.location = _root + "Test/Report/?id=" + id
+        window.location = _root + "Test/Report/?id=" + id;
     }
 
     function analyse() {
-        window.location = _root + "Test/ToAnalyse"
+        window.location = _root + "Test/ToAnalyse";
+    }
+
+    function finish() {
+        window.location = _root + "Test/ToFinish";
     }
 
     function del(id) {

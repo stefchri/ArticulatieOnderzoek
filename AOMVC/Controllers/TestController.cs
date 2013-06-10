@@ -35,7 +35,7 @@ namespace AOMVC.Controllers
 
         public ActionResult Index()
         {
-            var tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(MVCExtensions.getCurrentAdmin().ID)).ToList();
+            var tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(MVCExtensions.getCurrentAdmin().ID)).OrderByDescending(t => t.Createddate).ToList();
             return View(tests);
         }
 
@@ -51,6 +51,7 @@ namespace AOMVC.Controllers
             Test test = new Test();
             test.AdminID = MVCExtensions.getCurrentAdmin().ID;
             test.Createddate = DateTime.UtcNow;
+            test.Modifieddate = DateTime.UtcNow;
             test.Kind = kind;
             test.RoutineID = routine;
             test.UserID = child;
@@ -60,9 +61,12 @@ namespace AOMVC.Controllers
             return Content( test.ID.ToString() );
         }
 
-        public ActionResult ToFinish(int id)
+        public ActionResult ToFinish()
         {
-            return View();
+            int id = MVCExtensions.getCurrentAdmin().ID;
+            List<Test> tests = Adapter.TestRepository.GetAll().ToList();
+            tests = tests.Where(t => t.AdminID == id && t.Analyseddate == null && t.Finisheddate == null).Where(t => t.Deleteddate == null).OrderByDescending(t => t.Finisheddate).ToList();
+            return View(tests);
         }
 
         public ActionResult ToAnalyse()
@@ -70,7 +74,7 @@ namespace AOMVC.Controllers
             int id = MVCExtensions.getCurrentAdmin().ID;
             List<Test> tests = Adapter.TestRepository.GetAll().ToList();
             tests = tests.Where(t => t.AdminID == id).ToList();
-            tests = tests.Where(t => t.Analyseddate == null).Where(t => t.Finisheddate != null).Where(t => t.Deleteddate == null).OrderBy(t => t.Finisheddate).ToList();
+            tests = tests.Where(t => t.Analyseddate == null).Where(t => t.Finisheddate != null).Where(t => t.Deleteddate == null).OrderByDescending(t => t.Finisheddate).ToList();
             return View(tests);
         }
 
@@ -103,6 +107,9 @@ namespace AOMVC.Controllers
             ViewBag.errors = errors;
             List<Error> visErrors = Adapter.ErrorRepository.GetAll().Where(m => m.ID == 21 || m.ID == 22).ToList();
             ViewBag.visual = visErrors;
+
+            
+
             return View(test);
         }
 
@@ -129,6 +136,13 @@ namespace AOMVC.Controllers
                     count[Convert.ToInt32(err.ID - 1)] += 1;
 	            }
             }
+
+            var Errorcount = 0;
+            foreach (var r in test.Results.ToList())
+            {
+                Errorcount += r.Errors.Count > 0 ? 1 : 0;
+            }
+            ViewBag.ErrorCount = Errorcount;
             ViewBag.Test = id;
             ViewBag.Count = count;
             ViewBag.Names = names;
@@ -243,6 +257,42 @@ namespace AOMVC.Controllers
             return Json(jo.ToString(), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetTestValues(long id)
+        {
+            var results = Adapter.ResultRepository.GetAll().Where(r => r.TestID.Equals(id)).OrderBy(r => r.Order).ToList();
+            JArray resultArray = new JArray(
+                results.Select(r => new JObject{      
+                        {"Audio", r.AudioSource},
+                        {"Value", r.Value},
+                        {"Order", r.Order}
+                })
+            );
+            JObject jo = new JObject();
+            jo["Results"] = resultArray;
+            JArray errors = new JArray();
+            foreach (var r in results)
+            {
+                if (r.Errors.Count() > 0)
+                {
+                    JObject ob = new JObject();
+                    string outp = "";
+                    if (r.Errors.First().ID == 21)
+                    {
+                        outp = "e2";
+                    }
+                    else if (r.Errors.First().ID == 22)
+                    {
+                        outp = "e1";
+                    }
+                    ob["Error"] = outp;
+                    ob["Order"] = r.Order;
+                    errors.Add(ob);
+                }
+            }
+            jo["Errors"] = errors;
+            return Json(jo.ToString(), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult UploadSound(string filename)
         {
             Test t = Adapter.TestRepository.GetByID(Convert.ToInt64(filename));
@@ -283,8 +333,13 @@ namespace AOMVC.Controllers
         {
             Test test = Adapter.TestRepository.GetByID(test_id);
             test.Comment = comment;
-            test.Finisheddate = DateTime.UtcNow;
+            if (comment != "")
+            {
+                test.Finisheddate = DateTime.UtcNow;
+            }
             test.Modifieddate = DateTime.UtcNow;
+            test.Results.ToList().ForEach(r => r.Errors.Clear());
+            test.Results.ToList().ForEach(r => Adapter.ResultRepository.Delete(r));
             Adapter.TestRepository.Update(test);
             Adapter.Save();
 
@@ -378,6 +433,12 @@ namespace AOMVC.Controllers
 
             foreach (Result item in finalResults)
             {
+                if (Adapter.ResultRepository.GetAll().Where(r => r.TestID.Equals(test_id) && r.Order.Equals(item.Order)).Count() > 0)
+                {
+                    Result re = Adapter.ResultRepository.GetAll().Where(r => r.TestID.Equals(test_id) && r.Order.Equals(item.Order)).First();
+                    Adapter.ResultRepository.Delete(re);
+                    Adapter.Save();
+                }
                 Adapter.ResultRepository.Insert(item);
             }
             
@@ -388,7 +449,7 @@ namespace AOMVC.Controllers
         public ActionResult HomeToAnalyse()
         {
             int id = MVCExtensions.getCurrentAdmin().ID;
-            List<Test> tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(id) && t.Analyseddate == null && t.Finisheddate != null).OrderBy(t => t.Createddate).Take(5).ToList();
+            List<Test> tests = Adapter.TestRepository.GetAll().Where(t => t.AdminID.Equals(id) && t.Analyseddate == null && t.Finisheddate != null).OrderByDescending(t => t.Createddate).Take(5).ToList();
             return PartialView(tests);
         }
     }

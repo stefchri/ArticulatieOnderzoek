@@ -37,7 +37,7 @@ namespace AOMVC.Controllers
         {
             Admin ad = MVCExtensions.getCurrentAdmin();
             List<Test> testsA = Adapter.TestRepository.GetAll().ToList();
-            testsA = testsA.Where(t => t.AdminID == ad.ID && t.Analyseddate == null && t.Finisheddate != null && t.Deleteddate == null).OrderBy(t => t.Finisheddate).Take(4).ToList();
+            testsA = testsA.Where(t => t.AdminID == ad.ID && t.Analyseddate == null && t.Finisheddate != null && t.Deleteddate == null).OrderByDescending(t => t.Finisheddate).Take(4).ToList();
             return PartialView(testsA);
         }
 
@@ -45,7 +45,7 @@ namespace AOMVC.Controllers
         {
             Admin ad = MVCExtensions.getCurrentAdmin();
             List<Test> testsA = Adapter.TestRepository.GetAll().ToList();
-            testsA = testsA.Where(t => t.AdminID == ad.ID && t.Analyseddate == null && t.Finisheddate == null && t.Deleteddate == null).OrderBy(t => t.Createddate).Take(4).ToList();
+            testsA = testsA.Where(t => t.AdminID == ad.ID && t.Analyseddate == null && t.Finisheddate == null && t.Deleteddate == null).OrderByDescending(t => t.Createddate).Take(4).ToList();
             return PartialView(testsA);
         }
 
@@ -53,7 +53,7 @@ namespace AOMVC.Controllers
         {
             Admin ad = MVCExtensions.getCurrentAdmin();
             List<User> user = Adapter.UserRepository.GetAll().ToList();
-            user = user.Where(t => t.AdminEnrolledID == ad.ID && t.Deleteddate == DateTime.MinValue).OrderBy(t => t.TestsTaken.OrderByDescending(e => e.Finisheddate).First().Finisheddate).Take(4).ToList();
+            user = user.Where(t => t.AdminEnrolledID == ad.ID && t.Deleteddate == DateTime.MinValue).OrderByDescending(t => t.TestsTaken.OrderByDescending(e => e.Finisheddate).First().Finisheddate).Take(4).ToList();
             return PartialView(user);
         }
 

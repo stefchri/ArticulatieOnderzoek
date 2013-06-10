@@ -1,15 +1,11 @@
-﻿//TODO:
-//
-//pauzeerscherm inlassen(in goto)
-//
-
-var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
+﻿var _getImages = "http://" + window.location.host.toString() + "/Test/GetRoutines";
 var _finished = "http://" + window.location.host.toString() + "/Test/";
 var _imgPath = "http://" + window.location.host.toString() + "/images/";
 var _soundUploadPath = "http://" + window.location.host.toString() + "/Test/UploadSound";
 var _soundFragmentPath = "http://" + window.location.host.toString() + "/sound/";
 var _swfPath = "http://" + window.location.host.toString() + "/Scripts/jRecorder.swf";
 var _finalizePath = "http://" + window.location.host.toString() + "/Test/Finalize";
+var _getTestValues = "http://" + window.location.host.toString() + "/Test/GetTestValues";
 var _timer;
 var _sentenceTimer;
 var _imgs;
@@ -26,9 +22,9 @@ var started = false;
     var App = {
         init: function () {
             this.bindEvents();
+            this.getImagesInRoutine();
         },
         bindEvents: function () {
-            this.getImagesInRoutine();
             $(window).resize(function (e) { App.handleResize(e); });
             $(window).mousemove(function (e) { App.toggleFooter(e); });
 
@@ -100,12 +96,19 @@ var started = false;
                 App.closeMicrophoneDialog();
             });
             $("#comment button").click(function () {
-                App.finalizeTest();
+                if (tinyMCE.activeEditor.getContent() == "") {
+                    $(".noComment").show();
+                } else {
+                    App.finalizeTest();
+                }
+                
             });
             $(window).keydown(function (e) {
                 App.handleKeyboard(e);
             });
-            this.initializeRecorder();
+            if (App.getQueryString("continue") == "") {
+                this.initializeRecorder();
+            }
         },
         //INIT
         getImagesInRoutine: function () {
@@ -126,10 +129,46 @@ var started = false;
                 });
                 $(".images").append(list);
                 $("#progress").html("1 / " + _imgs.length);
+
+
+                App.getPreviousResults();
             });
             var e = {};
             e.currentTarget = window;
             this.handleResize(e);
+        },
+        //GET PREVIOUS TESTING
+        getPreviousResults: function () {
+            if (App.getQueryString("continue") != "") {
+                console.log("Previous test found.");
+                $.getJSON(_getTestValues, { "id": _testid }, function (data) {
+                    var tests = $.parseJSON(data).Results;
+                    var errors = $.parseJSON(data).Errors;
+
+                    for (var i = 0; i < tests.length; i++) {
+                        _audio[tests[i].Order] = tests[i].Audio.split('.')[0];
+                        _results[tests[i].Order] = (tests[i].Value == 0 ? false : true);
+                    };
+                    var j = 0;
+                    var flag = false;
+                    for (var j = 0; j < errors.length; j++) {
+                        if (j<errors.length) {
+                            _errors[errors[j].Order] = errors[j].Error;
+                        }
+                    };
+                    var next = tests[tests.length - 1].Order;
+                    _active = next;
+                    var l = _imgs[next];
+                    App.renderImage(l);
+                    App.renderProgress(next + 1);
+                    App.initializeRecorder();
+                });
+            }
+        },
+        getQueryString: function (name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         },
         //USER EVENTS VISUALS
         toggleFooter: function (e) {
@@ -212,7 +251,6 @@ var started = false;
                 l = _imgs[pos];
                 _active++;
                 App.stopRecording();
-                //App.sendData();
                 App.resetErrorList();
                 App.renderImage(l);
                 App.renderProgress(_active + 1);
@@ -291,10 +329,10 @@ var started = false;
         //RECORDER HANDLERS
         initializeRecorder: function () {
             var settings = {
-                'rec_width': '150',
-                'rec_height': '100',
-                'rec_top': '0%',
-                'rec_left': '0%',
+                'rec_width': '400',
+                'rec_height': '300',
+                'rec_top': '40%',
+                'rec_left': '10%',
                 'recorderlayout_id': 'flashrecarea',
                 'recorder_id': 'audiorecorder',
                 'recorder_name': 'audiorecorder',
@@ -302,13 +340,17 @@ var started = false;
                 'bgcolor': '#000000',
                 'swf_path': _swfPath,
                 'host': _soundUploadPath + '?filename=' + _testid.toString(),
-                'callback_started_recording': function () { },
-                'callback_finished_recording': function (e) { App.finished(e) },
+                'callback_started_recording': function () { console.log("started")},
+                'callback_finished_recording': function (e) {  },
                 'callback_stopped_recording': function () { },
-                'callback_finished_params': function(params){ App.showParameter(params) },
+                'callback_finished_params': function (params) { App.showParameter(params) },
+                'callback_next_recording': function () { console.log("NEXT RECORDING") },
                 'callback_error_recording': function () { console.log("Error rec")},
                 'callback_activityTime': function (time) { },
-                'callback_activityLevel': function (level) { }
+                'sampledata': function () { },
+                'callback_activityLevel': function (level) {/*console.log(level)*/ },
+                'callback_test': function () { },
+                'callback_muted': function () { console.log("muted");}
             };
             $.jRecorder(settings, $("#record"));
         },
@@ -331,6 +373,9 @@ var started = false;
             _paused = true;
             $(".overlay").fadeIn();
             $("#pause").fadeIn();
+            $("#stopTest").click(function () {
+                App.finalizeTest();
+            });
         },
         resumeRecording: function () {
             $.jRecorder.resume();
@@ -351,11 +396,20 @@ var started = false;
         showParameter: function (params) {
             console.log("params: " + params);
             _audio[_active] = params;
+            if (_imgs.length != _active) {
+                $.jRecorder.continue();
+            }
         },
-
-
+        
         finalizeTest: function () {
-            _comment = tinyMCE.activeEditor.getContent();
+            if (tinyMCE.activeEditor == null) {
+                _comment = "";
+            }
+            else {
+                _comment = tinyMCE.activeEditor.getContent();
+            }
+            
+            
             var formData = new FormData();
             formData.append("comment", _comment);
             formData.append("errors", JSON.stringify(_errors));

@@ -20,10 +20,8 @@
                 <dd>@Model.Routine.Name</dd>
                 <dt>Techniek</dt>
                 <dd>@Model.Kind</dd>
-                <dt>Juist/Fout</dt>
-                <dd>@Model.Results.Where(m => m.Value == 1).Count()/@Model.Results.Where(m => m.Value == 0).Count() </dd>
-                <dt>Opmerking</dt>
-                <dd>@Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Comment))</dd>
+                <dt>Voor normering</dt>
+                <dd>@(Model.ForStatistics==1?"Ja":"Nee")</dd>
             </dl>
         </section>
         <section class="span5">
@@ -33,8 +31,6 @@
                 <dd>@Html.DisplayFor(m => m.Createddate, "LocalDatetime")</dd>
                 <dt>Afgerond</dt>
                 <dd>@Html.DisplayFor(m => m.Finisheddate, "LocalDatetime")</dd>
-                <dt>Voor normering</dt>
-                <dd>@(Model.ForStatistics==1?"Ja":"Nee")</dd>
             </dl>
         </section>
     </section>
@@ -48,8 +44,6 @@
                 <dd>@Model.User.Email</dd>
                 <dt>Geboortedatum</dt>
                 <dd>@Model.User.DateOfBirth</dd>
-                <dt>Ingeschreven door</dt>
-                <dd>@Model.User.AdminEnrolled.Firstname @Model.User.AdminEnrolled.Surname</dd>
                 <dt>Aantal testen</dt>
                 <dd>@Model.User.TestsTaken.Count()</dd>
             </dl>

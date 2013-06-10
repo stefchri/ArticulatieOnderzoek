@@ -34,6 +34,12 @@ h1, h2, h3 {
     z-index: 300;
     background: rgba(0,0,0,0.5);
 }
+.nodisplay {
+    display: none;
+}
+.error {
+    color:red;
+}
 #startTest{
     position: absolute;
     top: 150px;
@@ -215,4 +221,7 @@ footer #progress {
 }
 #comment button {
     margin-top: 25px;
+}
+#flashrecarea {
+    z-index: 500;
 }

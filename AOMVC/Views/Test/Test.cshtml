@@ -67,7 +67,7 @@
     
     <div id="pause">
         <h3>Test gepauzeerd</h3>
-        <button class="btn btn-danger" onclick="window.location='@testUrl'" title="Stop de test">Stop de test</button>
+        <button class="btn btn-danger" id="stopTest" title="Stop de test">Stop de test</button>
         <button class="btn btn-success" id="resume" title="Ga verder">Ga verder met de test</button>
     </div>
     <div id="record"></div>
@@ -77,6 +77,7 @@
     <div id="comment">
         <h3>Eerste opmerkingen of bijzonderheden</h3>
         <textarea id="comment_field"></textarea>
+        <p class="noComment error nodisplay">Opmerking is verplicht.</p>
         <button class="btn-success btn" title="opslagen en afsluiten">Opslagen en afsluiten</button>
     </div>
     <script>

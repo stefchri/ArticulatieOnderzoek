@@ -13,7 +13,8 @@
             <td>@test.User.Firstname @test.User.Surname</td>
             <td>@test.Routine.Name</td>
             <td>@Html.DisplayFor(modelItem => test.Createddate, "LocalDatetime")</td>
-            <td>@Html.ActionLink("Afwerken", "ContinueTest", "Test", new { id = test.ID }, new  { @title="Test afwerken"})</td>
+            <td><a href="#" onclick="fin(@test.ID)" class="delete" title="Test afwerken">Afwerken</a></td>
         </tr>
     }
 </table>
+<a href="~/Test/ToFinish" class="btn" title="Meer"><i class="icon-plus"></i> &nbsp;&nbsp;&nbsp;Meer&nbsp;</a>

@@ -55,13 +55,11 @@ var _errorList = ["",
             $("#previous").click(function () {
                 if (_active != 1) {
                     App.showAnalyse(_active - 1);
-                    StartPhonetic();
                 }
             });
             $("#next").click(function () {
                 if (_active != _results.length) {
                     App.showAnalyse(_active + 1);
-                    StartPhonetic();
                 }
             });
             $("#save").click(function () {
@@ -73,7 +71,6 @@ var _errorList = ["",
 
         },
         bindResultEvents: function () {
-            StartPhonetic();
             $("#defaultspicture img").click(function () {
                 if (!_playing) {
                     document.getElementById("fragment").play();
@@ -213,6 +210,7 @@ var _errorList = ["",
                     $(e.currentTarget).parent().remove();
                 }
             });
+            StartPhonetic();
         },
         showAnalyse: function (number) {
             $(".result").hide();

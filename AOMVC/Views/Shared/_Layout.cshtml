@@ -11,7 +11,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    
+    <div id="body-wrapper">
     @if (Request.IsAuthenticated) {
         
     <div class="container-fluid fullheight">
@@ -28,7 +28,7 @@
     {
         <div class="container fullheight">
           <div class="fullheight">
-            <div class="fullheight content">
+            <div class="fullheight">
                 @RenderBody()
             </div>
           </div>
@@ -41,8 +41,15 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/alert")
     <script>
-        $(".sidebar").css({"height":$(window).height()+'px'});
+        $(".sidebar").css({ "height": $(window).height() + 'px' });
+        var True = true;
+        var False = false;
+        if(@Request.IsAuthenticated.ToString())
+        {
+            $('#body-wrapper').css('background-color','rgba(255, 255, 255, 0.7)' );
+        }
     </script>
     @RenderSection("scripts", required: false)
+        </div>
 </body>
 </html>

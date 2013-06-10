@@ -1,0 +1,145 @@
+﻿@model ICollection<LibAOModels.Test>
+
+@{
+    ViewBag.Title = "Testen Af Maken";
+
+    string output = "";
+}
+@section Styles{
+    @Styles.Render("~/Content/themes/lightness")
+}
+
+<h1>Testen die nog moeten afgemaakt worden</h1>
+<hr />
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            Aangemaakt
+        </th>
+        <th>
+            Kind
+        </th>
+        <th>
+            Routine
+        </th>
+        <th>
+            Soort
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    
+    switch (item.Kind)
+    {
+        case "normal":
+            output = "Normaal";
+            break;
+        case "sentence":
+            output = "Aanvulzin";
+            break;
+        case "repeat":
+            output = "Herhalen";
+            break;
+    }    
+        
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Createddate, "LocalDatetime")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Firstname) @Html.DisplayFor(modelItem => item.User.Surname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Routine.Name)
+        </td>
+        
+        <td>
+            @output
+        </td>
+        <td>
+            <a href="#" onclick="fin(@item.ID)" class="delete" title="Test afwerken">Afwerken</a> |
+            <a href="#" onclick="del(@item.ID)" class="delete" title="verwijderen">Verwijderen</a>
+        </td>
+    </tr>
+}
+
+</table>
+@section Scripts{
+   @Scripts.Render("~/bundles/jqueryui")
+   @Scripts.Render("~/bundles/alert")
+<script>
+    function fin(id) {
+        window.location = "http://" + window.location.host + "/Test/Test?id=" + id + "&continue=1";
+    };
+    function del(id) {
+        var formData = new FormData();
+        formData.append("id", id);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function (evt) {
+            showDialog(evt.target.responseText, id);
+        }, false);
+        xhr.addEventListener("error", function (evt) {
+            console.log("There was an error attempting to upload the file.");
+        }, false);
+        xhr.addEventListener("abort", function (evt) {
+            console.log("The upload has been canceled by the user or the browser dropped the connection.");
+        }, false);
+
+
+        xhr.open("POST", "http://" + window.location.host + "/Test/Delete/");
+        xhr.send(formData);
+    }
+    function showDialog(code, id) {
+        switch (code) {
+            case '200':
+                var dialog = '<div id="dialog-confirm" title="Test verwijderen?">'
+                    + '<p><span class="ui-icon ui-icon-trash" style="float: left; margin: 0 7px 20px 0;"></span>Deze test zal verwijderd worden en kan niet meer teruggehaald worden. Bent u zeker dat u deze wilt verwijderen?</p>';
+                +'</div>';
+                $("body").append(dialog);
+
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    height: 180,
+                    width: 550,
+                    modal: true,
+                    buttons: {
+                        "Verwijderen": function () {
+                            deleteConfirmedTest(id);
+                            $(this).dialog("close");
+                        },
+                        Annuleer: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                break;
+            case '401': console.log("not mine");
+                break;
+
+        }
+    };
+
+    function deleteConfirmedTest(id) {
+        var formData = new FormData();
+        formData.append("id", id);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function (evt) {
+            window.location = "http://" + window.location.host + "/test/toanalyse?message=testdeleted";
+        }, false);
+        xhr.addEventListener("error", function (evt) {
+            console.log("There was an error attempting to delete the test.");
+        }, false);
+        xhr.addEventListener("abort", function (evt) {
+            console.log("The upload has been canceled by the user or the browser dropped the connection.");
+        }, false);
+
+        xhr.open("POST", "http://" + window.location.host + "/Test/DeleteConfirmed/");
+        xhr.send(formData);
+    }
+</script>
+
+}

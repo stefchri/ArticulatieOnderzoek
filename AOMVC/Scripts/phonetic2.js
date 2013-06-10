@@ -70,7 +70,7 @@ function StartPhonetic() {
                         break;
                     case 27: $(tooltip).remove();
                         break;
-                    case 13: AddToString(val, $(".active").html());
+                    case 13: console.log($(".active").html()); AddToString(val, $(".active").html());
                         break;
 
                 }
