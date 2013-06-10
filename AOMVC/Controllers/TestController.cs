@@ -78,6 +78,15 @@ namespace AOMVC.Controllers
             return View(tests);
         }
 
+        public ActionResult Finished()
+        {
+            int id = MVCExtensions.getCurrentAdmin().ID;
+            List<Test> tests = Adapter.TestRepository.GetAll().ToList();
+            tests = tests.Where(t => t.AdminID == id).ToList();
+            tests = tests.Where(t => t.Analyseddate != null).Where(t => t.Finisheddate != null).Where(t => t.Deleteddate == null).OrderByDescending(t => t.Analyseddate).ToList();
+            return View(tests);
+        }
+
         [HttpPost]
         public ActionResult Delete(long id)
         {

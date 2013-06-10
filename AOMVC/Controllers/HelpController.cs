@@ -13,5 +13,11 @@ namespace AOMVC.Controllers
             return View();
         }
 
+        public ActionResult GetPdf()
+        {
+            string file = Server.MapPath("~/helpdocument/help.pdf");
+            return File(file, "application/pdf", "AOHelp.pdf");
+        }
+
     }
 }

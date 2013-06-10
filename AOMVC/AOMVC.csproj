@@ -247,6 +247,7 @@
     <Content Include="Content\phonetic\lucida_unicode_sans-webfont.eot" />
     <Content Include="Content\phonetic\lucida_unicode_sans-webfont.ttf" />
     <Content Include="Content\phonetic\lucida_unicode_sans-webfont.woff" />
+    <Content Include="helpdocument\help.pdf" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="images\c3Q0LmpwZzc5Ng==.jpeg" />
     <Content Include="Scripts\alerts.js" />
@@ -582,6 +583,7 @@
     <Content Include="Views\Home\RecentlyTestedChildren.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ShortDate.cshtml" />
     <Content Include="Views\Test\ToFinish.cshtml" />
+    <Content Include="Views\Test\Finished.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
