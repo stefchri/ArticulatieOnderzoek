@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Genereertijd: 10 jun 2013 om 20:45
+-- Genereertijd: 11 jun 2013 om 05:55
 -- Serverversie: 5.5.27
 -- PHP-versie: 5.4.7
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
 --
 
 INSERT INTO `admins` (`admin_id`, `admin_email`, `admin_password`, `admin_passwordsalt`, `admin_firstname`, `admin_surname`, `admin_gender`, `admin_createddate`, `admin_modifieddate`, `admin_deleteddate`, `admin_lastloggedindate`) VALUES
-(1, 'stefaan.ch@gmail.com', 'wL39u6F0TZvlkb4Q1Y5zjPVodyc=', 'j6l/2OqSEBrHy1lY8WPkBkK2sTnkHfQdiIVbwggMvH4=', 'Stefaan', 'Christiaens', 'm', '2013-04-05 08:42:12', NULL, NULL, '2013-06-10 14:11:40');
+(1, 'stefaan.ch@gmail.com', 'wL39u6F0TZvlkb4Q1Y5zjPVodyc=', 'j6l/2OqSEBrHy1lY8WPkBkK2sTnkHfQdiIVbwggMvH4=', 'Stefaan', 'Christiaens', 'm', '2013-04-05 08:42:12', NULL, NULL, '2013-06-11 01:19:41');
 
 -- --------------------------------------------------------
 
@@ -197,7 +197,25 @@ CREATE TABLE IF NOT EXISTS `results` (
   `test_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`result_id`),
   KEY `fk_results_tests1_idx` (`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `results`
+--
+
+INSERT INTO `results` (`result_id`, `test_order`, `result_audiosource`, `result_phonetic`, `result_value`, `test_id`) VALUES
+(1, 3, '701520.wav', NULL, 1, 1),
+(2, 1, '467128.wav', NULL, 1, 1),
+(3, 2, '761266.wav', NULL, 0, 1),
+(4, 4, '64393.wav', NULL, 0, 1),
+(5, 5, '20830.wav', NULL, 0, 1),
+(6, 1, '450450.wav', NULL, 1, 2),
+(7, 2, '70966.wav', NULL, 1, 2),
+(8, 1, '971802.wav', 'YgBsAOcAawC0AG4A', 1, 3),
+(9, 2, '92746.wav', 'ZABzAGYAZwBzAGQAZwBmAA==', 1, 3),
+(10, 3, '262604.wav', '', 1, 3),
+(11, 4, '425461.wav', '', 1, 3),
+(12, 5, '621677.wav', 'QQByAG4A', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -211,6 +229,16 @@ CREATE TABLE IF NOT EXISTS `results_has_errors` (
   PRIMARY KEY (`result_id`,`error_id`),
   KEY `fk_results_has_errors_errorcategories1_idx` (`error_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `results_has_errors`
+--
+
+INSERT INTO `results_has_errors` (`result_id`, `error_id`) VALUES
+(12, 15),
+(8, 18),
+(11, 19),
+(1, 22);
 
 -- --------------------------------------------------------
 
@@ -228,7 +256,14 @@ CREATE TABLE IF NOT EXISTS `routines` (
   `admin_created` int(11) unsigned NOT NULL,
   PRIMARY KEY (`routine_id`),
   KEY `fk_routines_admins1_idx` (`admin_created`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `routines`
+--
+
+INSERT INTO `routines` (`routine_id`, `routine_name`, `routine_url`, `routine_createddate`, `routine_modifieddate`, `routine_deleteddate`, `admin_created`) VALUES
+(1, 'Standaardmodule', NULL, '2013-06-11 00:53:02', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -243,6 +278,17 @@ CREATE TABLE IF NOT EXISTS `routines_has_images` (
   PRIMARY KEY (`routine_id`,`image_id`),
   KEY `fk_routines_has_images_images1` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `routines_has_images`
+--
+
+INSERT INTO `routines_has_images` (`routine_id`, `image_id`, `image_order`) VALUES
+(1, 44, 1),
+(1, 45, 4),
+(1, 46, 3),
+(1, 47, 5),
+(1, 61, 2);
 
 -- --------------------------------------------------------
 
@@ -267,7 +313,17 @@ CREATE TABLE IF NOT EXISTS `tests` (
   KEY `fk_tests_admins1` (`admin_id`),
   KEY `fk_tests_users1` (`user_id`),
   KEY `fk_tests_routines1` (`routine_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `tests`
+--
+
+INSERT INTO `tests` (`test_id`, `test_createddate`, `test_modifieddate`, `test_deleteddate`, `test_finisheddate`, `test_analyseddate`, `test_kind`, `test_comment`, `test_forstatistics`, `admin_id`, `user_id`, `routine_id`) VALUES
+(1, '2013-06-11 01:03:31', '2013-06-11 01:10:39', NULL, '2013-06-11 01:10:39', NULL, 'normal', '<p>Mieke heeft moeite met de frontale s.</p>', 1, 1, 1, 1),
+(2, '2013-06-11 01:11:41', '2013-06-11 01:12:34', NULL, NULL, NULL, 'normal', '', 1, 1, 1, 1),
+(3, '2013-06-11 01:12:46', '2013-06-11 01:13:05', NULL, '2013-06-11 01:13:05', '2013-06-11 01:21:42', 'normal', '<p>OKE</p>', 1, 1, 1, 1),
+(4, '2013-06-11 02:51:40', '2013-06-11 02:51:40', NULL, NULL, NULL, 'normal', NULL, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -294,7 +350,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `admin_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`user_id`),
   KEY `fk_users_admins1` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `users`
+--
+
+INSERT INTO `users` (`user_id`, `user_firstname`, `user_surname`, `user_email`, `user_dateofbirth`, `user_gender`, `user_speech`, `user_language`, `user_hearing`, `user_anamnesis`, `user_other`, `user_report`, `user_createddate`, `user_modifieddate`, `user_deleteddate`, `admin_id`) VALUES
+(1, 'Mieke', 'Mertens', 'stefaan.ch@gmail.com', '2013-04-15', 'f', 0, 0, 0, 0, NULL, NULL, '2013-06-11 00:58:13', '0001-01-01 00:00:00', '0001-01-01 00:00:00', 1);
 
 --
 -- Beperkingen voor gedumpte tabellen

@@ -309,7 +309,7 @@ var _errorList = ["",
         },
         finalise: function () {
             App.saveAnalysis();
-            var test = window.confirm("Bent u zeker dat alles coorect ingevuld is de analyse afgerond is?");
+            var test = window.confirm("Bent u zeker dat alles correct ingevuld is en dat de analyse afgerond is?");
             if (test) {
                 window.location = _root + "Test/Report?id=" + _testid;
             }

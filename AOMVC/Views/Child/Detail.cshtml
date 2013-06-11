@@ -25,7 +25,7 @@
     <p>Ingeschreven op <strong>@Html.DisplayFor(model => Model.Createddate.Date,"ShortDate")</strong> door logopedist <strong>@Model.AdminEnrolled.Firstname @Model.AdminEnrolled.Surname</strong></p>
     <hr />
     <div class="actionlink">
-        <button class="btn" onclick="save(@Model.ID)" title="Opslagen">Opslagen</button>
+        <button class="btn" onclick="save(@Model.ID)" title="Opslaan">Opslaan</button>
         <button class="btn" onclick="window.location='@Url.Action("Appointment", "Contact", new { id = Model.ID})'" title="Afspraak maken">Maak een afspraak</button>
         <button class="btn" onclick="window.location='@Url.Action("Index", "Child")'" title="Terug naar lijst">Terug naar lijst</button>
     </div>
