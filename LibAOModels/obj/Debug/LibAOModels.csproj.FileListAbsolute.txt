@@ -11,6 +11,5 @@ C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\LibAOMode
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.ClientValidation.dll
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\DataAnnotationsExtensions.dll
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\bin\Debug\WebActivator.dll
-C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.csprojResolveAssemblyReference.cache
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.dll
 C:\Users\Eigenaar\Documents\ArticulatieOnderzoek\LibAOModels\obj\Debug\LibAOModels.pdb
