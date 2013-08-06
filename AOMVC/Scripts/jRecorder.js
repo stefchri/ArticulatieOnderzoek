@@ -10,9 +10,15 @@
  * Author: Sajith Amma
  * Version: 1.1
  * Date: 14 December 2011
+ 
+ 
+ 
+ 
+  * Edited by Stefaan Chistiaens 
  */
 
 /* Code is not verified using http://www.jshint.com/ */
+
 
 
 (function ($){
